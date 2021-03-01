@@ -1,0 +1,33 @@
+{
+  "name": "slub/ddb-kitodo-zeitungsportal",
+  "type": "typo3-cms-extension",
+  "description": "Templates, Styles and Configuration for DDB Zeitungsportal",
+  "homepage": "https://github.com/slub/ddb-kitodo-zeitungsportal",
+  "keywords": [
+    "TYPO3",
+    "extension",
+    "ddb"
+  ],
+  "authors": [
+    {
+      "name": "Alexander Bigga",
+      "email": "alexander.bigga@slub-dresden.de",
+      "role": "Developer"
+    },
+    {
+      "name": "Beatrycze Volk",
+      "email": "beatrycze.volk@slub-dresden.de",
+      "role": "Developer"
+    }
+  ],
+  "license": "GPL-3.0-or-later",
+  "require": {
+    "typo3/cms-core": "~9.5.24",
+    "kitodo/presentation": "~3.1.2|dev-master"
+  },
+  "autoload": {
+    "psr-4": {
+      "Slub\\SlubWebLdp\\": "Classes/"
+    }
+  }
+}
