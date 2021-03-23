@@ -23,10 +23,12 @@ module.exports = function(grunt) {
                 },
                 files: {
                     "Resources/Public/JavaScript/ddbKitodoZeitungsportal.js" : [
-                        'Resources/Public/Javascript/OpenLayers/glif.min.js',
-                        'Resources/Public/Javascript/OpenLayers/ol3-dlf.js',
+                        '../dlf/Resources/Public/Javascript/jQueryUI/jquery-ui-mouse-slider-resizable-autocomplete.js',
+                        '../dlf/Resources/Public/Javascript/OpenLayers/glif.min.js',
+                        '../dlf/Resources/Public/Javascript/OpenLayers/ol3-dlf.js',
                         // Viewer
-                        '../dlf/Resources/Public/Javascript/PageView/Utility.js',
+                        // highlight exact word in search results
+                        'Resources/Private/JavaScript/Kitodo/PageView/Utility.js',
                         '../dlf/Resources/Public/Javascript/PageView/OL3.js',
                         '../dlf/Resources/Public/Javascript/PageView/OL3Styles.js',
                         '../dlf/Resources/Public/Javascript/PageView/OL3Sources.js',
@@ -35,9 +37,14 @@ module.exports = function(grunt) {
                         '../dlf/Resources/Public/Javascript/PageView/AnnotationControl.js',
                         '../dlf/Resources/Public/Javascript/PageView/ImageManipulationControl.js',
                         '../dlf/Resources/Public/Javascript/PageView/FulltextDownloadControl.js',
+                        // custom scrolling
                         'Resources/Private/JavaScript/Kitodo/PageView/FulltextControl.js',
                         '../dlf/Resources/Public/Javascript/PageView/FullTextUtility.js',
-                        '../dlf/Resources/Public/Javascript/PageView/PageView.js'
+                        '../dlf/Resources/Public/Javascript/PageView/PageView.js',
+                        // Search
+                        // use standard input instead of submit button
+                        // TODO: add template
+                        'Resources/Private/JavaScript/Kitodo/Search/SearchInDocument.js'
                     ],
                 }
             }
