@@ -29,5 +29,10 @@
     "psr-4": {
       "Slub\\SlubWebLdp\\": "Classes/"
     }
+  },
+  "extra": {
+    "typo3/cms": {
+       "extension-key": "ddb_kitodo_zeitungsportal"
+    }
   }
 }
