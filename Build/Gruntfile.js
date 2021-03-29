@@ -41,7 +41,6 @@ module.exports = function(grunt) {
                         'Resources/Private/JavaScript/Kitodo/PageView/FulltextControl.js',
                         '../dlf/Resources/Public/Javascript/PageView/FullTextUtility.js',
                         // use standard input instead of submit button
-                        // TODO: add template
                         'Resources/Private/JavaScript/Kitodo/PageView/SearchInDocument.js',
                         '../dlf/Resources/Public/Javascript/PageView/PageView.js'
                     ],
