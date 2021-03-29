@@ -5,6 +5,6 @@ page {
         kitodo >
     }
     includeJSFooterlibs {
-        ddbKitodoZeitungsportal = EXT:ddb_kitodo_zeitungsportal/Resources/Public/Javascript/ddbKitodoZeitungsportal.js
+        ddbKitodoZeitungsportal = EXT:ddb_kitodo_zeitungsportal/Resources/Public/JavaScript/ddbKitodoZeitungsportal.js
     }
 }
