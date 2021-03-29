@@ -1,8 +1,8 @@
 page {
     includeCSS {
-        sxndCss = EXT:ddb_kitodo_zeitungsportal/Resources/Public/Css/ddbKitodoZeitungsportal.css
-        sxndCss.forceOnTop = 1
-        kitodo >
+#        ddbKitodoZeitungsportal = EXT:ddb_kitodo_zeitungsportal/Resources/Public/Css/ddbKitodoZeitungsportal.css
+#        ddbKitodoZeitungsportal.forceOnTop = 1
+#        kitodo >
     }
     includeJSFooterlibs {
         ddbKitodoZeitungsportal = EXT:ddb_kitodo_zeitungsportal/Resources/Public/JavaScript/ddbKitodoZeitungsportal.js
