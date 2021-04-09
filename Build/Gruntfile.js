@@ -46,18 +46,21 @@ module.exports = function(grunt) {
                     ],
                 }
             }
-          },
+        },
         watch: {
             styles: {
                 files: ['Resources/Private/Less/**/*.less'],
                 tasks: ['less'],
                 options: {
-                    nospawn: true
+                    spawn: false
                 }
             },
             js: {
-                files: ['Resources/Private/JavaScript/*.js'],
-                tasks: ['terser']
+                files: ['Resources/Private/JavaScript/**/*.js'],
+                tasks: ['terser'],
+                options: {
+                    spawn: false
+                }
             }
         }
     });
