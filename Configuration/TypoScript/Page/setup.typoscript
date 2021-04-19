@@ -7,6 +7,8 @@ page {
     includeJSFooterlibs {
         ddbKitodoZeitungsportal = EXT:ddb_kitodo_zeitungsportal/Resources/Public/JavaScript/ddbKitodoZeitungsportal.js
     }
+    10 = FLUIDTEMPLATE
+    10.file = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Templates/Main.html
 }
 
 plugin.tx_dlf.useragent = DDB/Zeitungsportal
@@ -15,7 +17,7 @@ plugin.tx_dlf_navigation {
   pages = {$constant.configPid}
   pageStep = 5
   targetPid = {$constant.viewerPid}
-  templateFile = fileadmin/Templates/Navigation.html
+  templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Templates/Navigation.html
 }
 
 plugin.tx_dlf_pagegrid {
@@ -23,7 +25,7 @@ plugin.tx_dlf_pagegrid {
   limit = 1000
   placeholder =
   targetPid = {$constant.viewerPid}
-  templateFile = fileadmin/Templates/PageGrid.html
+  templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Templates/PageGrid.html
 }
 
 plugin.tx_dlf_pageview {
@@ -33,7 +35,7 @@ plugin.tx_dlf_pageview {
   elementId = tx-dlf-map
   addJStoBody = 0
   useInternalProxy = 1
-  templateFile = fileadmin/Templates/PageView.html
+  templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Templates/PageView.html
 }
 
 plugin.tx_dlf_search {
