@@ -42,7 +42,9 @@ module.exports = function(grunt) {
                         '../dlf/Resources/Public/Javascript/PageView/FullTextUtility.js',
                         // use standard input instead of submit button
                         'Resources/Private/JavaScript/Kitodo/PageView/SearchInDocument.js',
-                        '../dlf/Resources/Public/Javascript/PageView/PageView.js'
+                        // highlight more than one word separated by ' ' and keeping search
+                        // phrase in search field
+                        'Resources/Private/JavaScript/Kitodo/PageView/PageView.js'
                     ],
                 }
             }
