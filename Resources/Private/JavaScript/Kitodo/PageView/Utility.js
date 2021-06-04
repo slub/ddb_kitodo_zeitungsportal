@@ -898,13 +898,15 @@ function trimByChars(string, characters) {
  */
 dlfUtils.searchFeatureCollectionForText = function (featureCollection, text) {
     var features = [];
+    //TODO: check what is inside ft
     featureCollection.forEach(function (ft) {
         if (ft.get('fulltext') !== undefined) {
             var trimmedFt = trimByChars(
                 ft.get('fulltext'),
                 [',', '.', ';', ':', '-', '\'', '"', '!', '?', '(', ')', '[', ']']
                 );
-            if (trimmedFt.toLowerCase() === text.toLowerCase()) {
+                //it highlights word if it is connected with other one by '-'
+            if ((trimmedFt.toLowerCase() === text.toLowerCase()) || (ft.get('fulltext').toLowerCase().indexOf(text.concat('-')) != -1)) {
                 features.push(ft);
             }
         }
