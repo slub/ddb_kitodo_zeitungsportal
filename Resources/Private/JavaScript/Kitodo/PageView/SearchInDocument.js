@@ -335,7 +335,7 @@ function triggerSearchAfterHitLoad() {
             search();
             break;
         } else if(queryParam[0].indexOf('query') != -1) {
-            $("input[id='tx-dlf-search-in-document-query']").val(decodeURIComponent(queryParam[1]));
+            $("input[id='tx-dlf-search-in-document-query']").val(decodeURIComponent(queryParam[1]).replace('+', ' '));
             search();
             break;
         }
