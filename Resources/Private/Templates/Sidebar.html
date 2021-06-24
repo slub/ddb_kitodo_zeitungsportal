@@ -1,0 +1,32 @@
+<div id="sidebar">
+  <div id="overview-wrapper">
+    <div id="ov_map"></div>
+  </div>
+  <ul>
+    <li><a href="#toc-wrapper">Inhaltsverzeichnis</a></li>
+    <li><a href="#references-wrapper">Permalink und Social Media</a></li>
+    <li><a href="#fulltext-wrapper">Volltextanzeige</a></li>
+    <li><a href="#search-wrapper">Volltextsuche</a></li>
+    <li><a href="#download-wrapper">Downloads</a></li>
+    <li><a href="#imagemanipulation-wrapper">Bildmanipulation</a></li>
+  </ul>
+  <div id="toc-wrapper">
+    <f:cObject typoscriptObjectPath="plugin.tx_dlf_tableofcontents" />
+  </div>
+  <div id="references-wrapper">
+
+  </div>
+  <div id="fulltext-wrapper">
+    <f:cObject typoscriptObjectPath="lib.fulltext" />
+    <div id="tx-dlf-fulltextselection"></div>
+  </div>
+  <div id="search-wrapper">
+    <f:cObject typoscriptObjectPath="lib.search" >
+  </div>
+  <div id="download-wrapper">
+	<f:cObject typoscriptObjectPath="lib.download" />
+  </div>
+  <div id="imagemanipulation-wrapper">
+	<f:cObject typoscriptObjectPath="lib.imagemanipulation" />
+  </div>
+</div>
