@@ -146,25 +146,25 @@ function getNeededQueryParams(element) {
     queryParams.push(page);
     queryParams[page] = element['page'];
     queryParams.push('hl');
-    queryParams['hl'] = encodeURIComponent(getHighlightWords(element['words']));
+    queryParams['hl'] = encodeURIComponent(getHighlights(element['highlight']));
 
     return queryParams;
 }
 
-function getHighlightWords(words) {
-    var highlightWords = $("input[id='tx-dlf-search-in-document-query']").val();
+function getHighlights(highlight) {
+    var highlights = "";
 
-    for(var i = 0; i < words.length; i++) {
-        if (highlightWords === "") {
-            highlightWords += words[i];
+    for(var i = 0; i < highlight.length; i++) {
+        if (highlights === "") {
+            highlights += highlight[i];
         } else {
-            if(highlightWords.indexOf(words[i]) === -1) {
-                highlightWords += ' ' + words[i];
+            if(highlights.indexOf(highlight[i]) === -1) {
+                highlights += ';' + highlight[i];
             }
         }
     }
 
-    return highlightWords;
+    return highlights;
 }
 
 /**
@@ -305,9 +305,9 @@ function addImageHighlightAfterFirstLoad(data) {
 
         data['documents'].forEach(function (element, i) {
             if(element['page'] == page) {
-                if (element['words'].length > 0) {
+                if (element['highlight'].length > 0) {
                     if(tx_dlf_viewer.map != null) {
-                        tx_dlf_viewer.displayHighlightWord(encodeURIComponent(getHighlightWords(element['words'])));
+                        tx_dlf_viewer.displayHighlightWord(encodeURIComponent(getHighlights(element['highlight'])));
                     } else {
                         setTimeout(addImageHighlightAfterFirstLoad, 500, data);
                     }
