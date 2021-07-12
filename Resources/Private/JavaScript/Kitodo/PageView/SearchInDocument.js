@@ -322,12 +322,14 @@ function triggerSearchAfterHitLoad() {
 }
 
 $(document).ready(function() {
-    document.getElementById('tx-dlf-search-in-document-query').addEventListener("keydown", function (e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            search();
-        }
-    });
-
-    triggerSearchAfterHitLoad()
+    if(document.getElementById('tx-dlf-search-in-document-query')) {
+        document.getElementById('tx-dlf-search-in-document-query').addEventListener("keydown", function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                search();
+            }
+        });
+    
+        triggerSearchAfterHitLoad()
+    }
 });
