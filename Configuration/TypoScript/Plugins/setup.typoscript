@@ -1,0 +1,91 @@
+plugin {
+  tx_dlf.useragent = DDB/Zeitungsportal
+ 
+  tx_dlf_navigation {
+    pages = {$constant.configPid}
+    pageStep = 5
+    targetPid = {$constant.viewerPid}
+    templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Templates/Navigation.html
+  }
+ 
+  tx_dlf_pagegrid {
+    pages = {$constant.configPid}
+    limit = 1000
+    placeholder =
+    targetPid = {$constant.viewerPid}
+    templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Templates/PageGrid.html
+  }
+ 
+  tx_dlf_pageview {
+    pages = {$constant.configPid}
+    excludeOther = 0
+    features = OverviewMap
+    elementId = tx-dlf-map
+    addJStoBody = 0
+    useInternalProxy = 1
+    templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Templates/PageView.html
+  }
+ 
+  tx_dlf_search {
+    pages = {$constant.configPid}
+    fulltext = 1
+    solrcore = 1
+    searchIn = document
+    suggest = 0
+    targetPid = {$constant.viewerPid}
+    targetPidPageView = {$constant.viewerPid}
+  }
+ 
+  tx_dlf_tableofcontents {
+    pages = {$constant.configPid}
+    excludeOther = 0
+    targetPid = {$constant.viewerPid}
+    templateFile =
+  }
+ 
+  tx_dlf_toolbox {
+    pages = {$constant.configPid}
+    tools =
+    solrcore = 1
+    fileGrpsImageDownload = DEFAULT,MAX
+    templateFile =
+  }
+  
+  tx_dlf_fulltexttool {
+    activateFullTextInitially = 1
+    fullTextScrollElement = div#tx-dlf-fulltextselection
+    searchHlParameters = hl,tx_dlf[highlight_word]
+    templateFile = EXT:dlf/Resources/Private/Templates/FulltextTool.tmpl
+  }
+   
+  tx_dlf_searchindocumenttool {
+    searchUrl = https://dev-ddb.fiz-karlsruhe.de/ddb-current/newspaper/item
+    documentIdUrlSchema = https://api-q1.deutsche-digitale-bibliothek.de/items/*id*/source/record
+    idInputName = issue_id
+    queryInputName = tx_dlf[query]
+    startInputName = tx_dlf[start]
+    pageInputName = issuepage
+    highlightWordInputName = tx_dlf[highlight_word]
+    encryptedInputName = tx_dlf[encrypted]
+    templateFile = EXT:dlf/Resources/Private/Templates/SearchInDocumentTool.tmpl
+  }
+}
+ 
+lib.fulltext < plugin.tx_dlf_toolbox
+lib.fulltext.tools = tx_dlf_fulltexttool
+ 
+lib.download < plugin.tx_dlf_toolbox
+lib.download.tools = tx_dlf_imagedownloadtool,tx_dlf_pdfdownloadtool,tx_dlf_fulltextdownloadtool
+ 
+lib.imagemanipulation < plugin.tx_dlf_toolbox
+lib.imagemanipulation.tools = tx_dlf_imagemanipulationtool
+   
+lib.search < plugin.tx_dlf_toolbox
+lib.search = USER
+lib.search {
+  userFunc = Kitodo\Dlf\Plugin\Toolbox->main
+  pages = 5
+  tools = tx_dlf_searchindocumenttool
+  fileGrpsImageDownload = DEFAULT,MAX
+  templateFile =
+}
