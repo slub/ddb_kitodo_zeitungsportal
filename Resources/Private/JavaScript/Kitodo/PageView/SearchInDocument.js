@@ -145,26 +145,24 @@ function getNeededQueryParams(element) {
     queryParams[highlightWord] = encodeURIComponent($("input[id='tx-dlf-search-in-document-query']").val());
     queryParams.push(page);
     queryParams[page] = element['page'];
-    queryParams.push('hl');
-    queryParams['hl'] = encodeURIComponent(getHighlightWords(element['words']));
 
     return queryParams;
 }
 
-function getHighlightWords(words) {
-    var highlightWords = $("input[id='tx-dlf-search-in-document-query']").val();
+function getHighlights(highlight) {
+    var highlights = "";
 
-    for(var i = 0; i < words.length; i++) {
-        if (highlightWords === "") {
-            highlightWords += words[i];
+    for(var i = 0; i < highlight.length; i++) {
+        if (highlights === "") {
+            highlights += highlight[i];
         } else {
-            if(highlightWords.indexOf(words[i]) === -1) {
-                highlightWords += ' ' + words[i];
+            if(highlights.indexOf(highlight[i]) === -1) {
+                highlights += ';' + highlight[i];
             }
         }
     }
 
-    return highlightWords;
+    return highlights;
 }
 
 /**
@@ -244,10 +242,6 @@ function search() {
                             + '<a href=\"' + getLink(element) + '\">' + element['snippet'] + '</a>'
                             + '</span>';
                     }
-
-                    if(element['page'] == page) {
-                        addHighlightEffect(element['highlight']);
-                    }
                 });
                 // Sort result by page.
                 resultItems.sort(function (a, b) {
@@ -256,14 +250,13 @@ function search() {
                 resultItems.forEach(function (item, index) {
                     resultList += '<li>' + item + '</li>';
                 });
+                addImageHighlight(data);
             } else {
                 resultList += '<li class="noresult">' + $('#tx-dlf-search-in-document-label-noresult').text() + '</li>';
             }
             resultList += '</ul>';
             resultList += getNavigationButtons(start, data['numFound']);
             $('#tx-dlf-search-in-document-results').html(resultList);
-
-            addImageHighlightAfterFirstLoad(data);
         },
         "json"
     ).done(function (data) {
@@ -287,35 +280,21 @@ function getCurrentPage() {
     return page;
 }
 
-function addImageHighlightAfterFirstLoad(data) {
-    var queryParams = getCurrentQueryParams(getBaseUrl(" "));
-    var hlParameterFound = false;
-    
-    for(var i = 0; i < queryParams.length; i++) {
-        var queryParam = queryParams[i].split('=');
+function addImageHighlight(data) {
+    var page = getCurrentPage();
 
-        if(queryParam[0] ==='hl') {
-            hlParameterFound = true;
-            break;
-        }
-    }
-
-    if(!hlParameterFound && data['numFound'] > 0) {
-        var page = getCurrentPage();
-
-        data['documents'].forEach(function (element, i) {
-            if(element['page'] == page) {
-                if (element['words'].length > 0) {
-                    if(tx_dlf_viewer.map != null) {
-                        tx_dlf_viewer.displayHighlightWord(encodeURIComponent(getHighlightWords(element['words'])));
-                    } else {
-                        setTimeout(addImageHighlightAfterFirstLoad, 500, data);
-                    }
+    data['documents'].forEach(function (element, i) {
+        if(element['page'] == page) {
+            if (element['highlight'].length > 0) {
+                if(tx_dlf_viewer.map != null) {
+                    tx_dlf_viewer.displayHighlightWord(encodeURIComponent(getHighlights(element['highlight'])));
+                } else {
+                    setTimeout(addImageHighlight, 500, data);
                 }
-                addHighlightEffect(element['highlight'])
             }
-        });
-    }
+            addHighlightEffect(element['highlight'])
+        }
+    });
 }
 
 function clearSearch() {

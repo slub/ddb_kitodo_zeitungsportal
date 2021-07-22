@@ -206,7 +206,6 @@ dlfUtils.exists = function (val) {
  * @return {JQueryStatic.Deferred}
  */
 dlfUtils.fetchImageData = function (imageSourceObjs) {
-
     // use deferred for async behavior
     var deferredResponse = new $.Deferred();
 
@@ -862,51 +861,17 @@ dlfUtils.scaleToImageSize = function (features, imageObj, width, height, opt_off
 };
 
 /**
- * Trim text in the feature to avoid comparison against for e.g. ',' or '.'.
- * @param {string} string
- * @param {string} character
- * @return {string}
- */
-function trimByChar(string, character) {
-    const arr = Array.from(string);
-    const first = arr.findIndex((char) => char !== character);
-    const last = arr.reverse().findIndex((char) => char !== character);
-    return (first === -1 && last === -1) ? '' : string.substring(first, string.length - last);
-}
-
-/**
- * Trim text in the feature to avoid comparison against given list of chars.
- * @param {string} string
- * @param {Array} characters
- * @return {string}
- */
-function trimByChars(string, characters) {
-    var trimmed = string;
-
-    for (const character of characters) {
-        trimmed = trimByChar(trimmed, character);
-    }
-
-    return trimmed;
-}
-
-/**
- * Search a feature collection for a feature with the given text
+ * Search a feature collection for a feature with the given coordinates
  * @param {Array.<ol.Feature>} featureCollection
- * @param {string} text
+ * @param {string} coordinates
  * @return {Array.<ol.Feature>|undefined}
  */
-dlfUtils.searchFeatureCollectionForText = function (featureCollection, text) {
+dlfUtils.searchFeatureCollectionForCoordinates = function (featureCollection, coordinates) {
     var features = [];
-    //TODO: check what is inside ft
+    //TODO: check if ft provides a way to access coordinates directly without concat
     featureCollection.forEach(function (ft) {
         if (ft.get('fulltext') !== undefined) {
-            var trimmedFt = trimByChars(
-                ft.get('fulltext'),
-                [',', '.', ';', ':', '-', '\'', '"', '!', '?', '(', ')', '[', ']']
-                );
-                //it highlights word if it is connected with other one by '-'
-            if ((trimmedFt.toLowerCase() === text.toLowerCase()) || (ft.get('fulltext').toLowerCase().indexOf(text.concat('-')) != -1)) {
+            if ((ft.get('width') + '_' + ft.get('height') + '_' + ft.get('hpos') + '_' + ft.get('vpos')) == coordinates) {
                 features.push(ft);
             }
         }
