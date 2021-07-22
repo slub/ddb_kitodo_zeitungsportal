@@ -71,21 +71,3 @@ plugin {
   }
 }
  
-lib.fulltext < plugin.tx_dlf_toolbox
-lib.fulltext.tools = tx_dlf_fulltexttool
- 
-lib.download < plugin.tx_dlf_toolbox
-lib.download.tools = tx_dlf_imagedownloadtool,tx_dlf_pdfdownloadtool,tx_dlf_fulltextdownloadtool
- 
-lib.imagemanipulation < plugin.tx_dlf_toolbox
-lib.imagemanipulation.tools = tx_dlf_imagemanipulationtool
-   
-lib.search < plugin.tx_dlf_toolbox
-lib.search = USER
-lib.search {
-  userFunc = Kitodo\Dlf\Plugin\Toolbox->main
-  pages = 5
-  tools = tx_dlf_searchindocumenttool
-  fileGrpsImageDownload = DEFAULT,MAX
-  templateFile =
-}
