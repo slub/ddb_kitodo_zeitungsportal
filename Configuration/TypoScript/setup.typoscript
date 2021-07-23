@@ -1,9 +1,6 @@
 # Configuration
 #<INCLUDE_TYPOSCRIPT: source="DIR:./Config/" extensions="typoscript">
 
-# Libraries
-<INCLUDE_TYPOSCRIPT: source="DIR:./Libraries/" extensions="typoscript">
-
 # Page
 <INCLUDE_TYPOSCRIPT: source="DIR:./Page/" extensions="typoscript">
 
