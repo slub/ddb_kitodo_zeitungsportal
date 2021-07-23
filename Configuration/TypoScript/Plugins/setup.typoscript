@@ -71,16 +71,39 @@ plugin {
   }
 }
  
+ lib.fulltext = USER
+lib.fulltext {
+    userFunc = Kitodo\Dlf\Plugin\Toolbox->main
+    pages = 1
+    tools = tx_dlf_fulltexttool
+    solrcore = 1
+    fileGrpsImageDownload = DEFAULT,MAX
+    templateFile =
+}
 lib.fulltext < plugin.tx_dlf_toolbox
-lib.fulltext.tools = tx_dlf_fulltexttool
- 
+
+lib.download = USER
+lib.download {
+    userFunc = Kitodo\Dlf\Plugin\Toolbox->main
+    pages = 1
+    tools = tx_dlf_imagedownloadtool,tx_dlf_pdfdownloadtool,tx_dlf_fulltextdownloadtool
+    solrcore = 1
+    fileGrpsImageDownload = DEFAULT,MAX
+    templateFile =
+}
 lib.download < plugin.tx_dlf_toolbox
-lib.download.tools = tx_dlf_imagedownloadtool,tx_dlf_pdfdownloadtool,tx_dlf_fulltextdownloadtool
- 
+
+lib.imagemanipulation = USER
+lib.imagemanipulation {
+    userFunc = Kitodo\Dlf\Plugin\Toolbox->main
+    pages = 1
+    tools = tx_dlf_imagemanipulationtool
+    solrcore = 1
+    fileGrpsImageDownload = DEFAULT,MAX
+    templateFile =
+}
 lib.imagemanipulation < plugin.tx_dlf_toolbox
-lib.imagemanipulation.tools = tx_dlf_imagemanipulationtool
-   
-lib.search < plugin.tx_dlf_toolbox
+
 lib.search = USER
 lib.search {
   userFunc = Kitodo\Dlf\Plugin\Toolbox->main
@@ -89,3 +112,4 @@ lib.search {
   fileGrpsImageDownload = DEFAULT,MAX
   templateFile =
 }
+lib.search < plugin.tx_dlf_toolbox

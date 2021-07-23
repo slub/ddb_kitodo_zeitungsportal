@@ -4,5 +4,5 @@
 # Page
 <INCLUDE_TYPOSCRIPT: source="DIR:./Page/" extensions="typoscript">
 
-# Plugin
+# Plugins
 #<INCLUDE_TYPOSCRIPT: source="DIR:./Plugins/" extensions="typoscript">
