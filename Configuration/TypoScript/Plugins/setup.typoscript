@@ -71,7 +71,7 @@ plugin {
   }
 }
  
- lib.fulltext = USER
+lib.fulltext = USER
 lib.fulltext {
     userFunc = Kitodo\Dlf\Plugin\Toolbox->main
     pages = 1
