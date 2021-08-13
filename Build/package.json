@@ -1,7 +1,7 @@
 {
   "name": "dfg-viewer",
   "version": "4.0.1",
-  "description": "This TYPO3 extension provides the configuration and setup for the DFG-Viewer",
+  "description": "This TYPO3 extension provides the configuration and setup for the DZB-Viewer",
   "main": "gruntfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
