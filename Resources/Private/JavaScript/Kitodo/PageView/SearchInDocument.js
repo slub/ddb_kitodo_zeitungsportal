@@ -212,10 +212,19 @@ function search() {
     $('#tx-dlf-search-in-document-clearing').hide();
     $('#tx-dlf-search-in-document-button-next').hide();
     $('#tx-dlf-search-in-document-button-previous').hide();
+
+    var postToUrl = '/';
+    if (typeof viewerUrl !== 'undefined') {
+        postToUrl = viewerUrl;
+    } else if ($('#localJsVariables').attr('viewer-url')) {
+        // viewerUrl is not available in DDB viewer page.
+        // but we can use this div-attribute: <div id="localJsVariables" class="off" viewer-url="https://dev-ddb.fiz-karlsruhe.de/viewerdev"  [..]/>
+        postToUrl = $('#localJsVariables').attr('viewer-url');
+    }
     // Send the data using post
     $.post(
         // viewerUrl is set by TypoScript and points to the viewer baseUrl
-        viewerUrl,
+        postToUrl,
         {
             eID: "tx_dlf_search_in_document",
             q: $("input[id='tx-dlf-search-in-document-query']").val(),
