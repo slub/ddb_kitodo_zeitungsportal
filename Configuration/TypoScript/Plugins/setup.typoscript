@@ -30,7 +30,6 @@ plugin {
     pages = {$constant.configPid}
     fulltext = 1
     solrcore = {$constant.solrCore}
-    searchIn = document
     suggest = 0
     targetPid = {$constant.viewerPid}
     targetPidPageView = {$constant.viewerPid}
@@ -74,7 +73,7 @@ plugin {
 lib.fulltext < plugin.tx_dlf_toolbox
 lib.fulltext {
     userFunc = Kitodo\Dlf\Plugin\Toolbox->main
-    pages = 1
+    pages = {$constant.configPid}
     tools = tx_dlf_fulltexttool
     solrcore = {$constant.solrCore}
     fileGrpsImageDownload = DEFAULT,MAX
@@ -84,7 +83,7 @@ lib.fulltext {
 lib.download < plugin.tx_dlf_toolbox
 lib.download {
     userFunc = Kitodo\Dlf\Plugin\Toolbox->main
-    pages = 1
+    pages = {$constant.configPid}
     tools = tx_dlf_imagedownloadtool,tx_dlf_pdfdownloadtool,tx_dlf_fulltextdownloadtool
     solrcore = {$constant.solrCore}
     fileGrpsImageDownload = DEFAULT,MAX
@@ -94,7 +93,7 @@ lib.download {
 lib.imagemanipulation < plugin.tx_dlf_toolbox
 lib.imagemanipulation {
     userFunc = Kitodo\Dlf\Plugin\Toolbox->main
-    pages = 1
+    pages = {$constant.configPid}
     tools = tx_dlf_imagemanipulationtool
     solrcore = {$constant.solrCore}
     fileGrpsImageDownload = DEFAULT,MAX
@@ -104,7 +103,7 @@ lib.imagemanipulation {
 lib.search < plugin.tx_dlf_toolbox
 lib.search {
   userFunc = Kitodo\Dlf\Plugin\Toolbox->main
-  pages = 5
+  pages = {$constant.configPid}
   tools = tx_dlf_searchindocumenttool
   fileGrpsImageDownload = DEFAULT,MAX
   templateFile =
