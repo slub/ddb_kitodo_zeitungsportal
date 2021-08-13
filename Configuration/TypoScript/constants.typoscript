@@ -1,19 +1,11 @@
 # Constants
-config {
-
-
-}
-
-#
-# Generic constants
-# ------------------------------------------------------------------------------------
-#
-
-config {
-    ddb_kitodo_zeitungsportal {
-        compressJs = 0
-        compressCss = 0
-        concatenateJs = 0
-        concatenateCss = 0
-    }
+constant {
+    # cat=plugin.ddb_kitodo_zeitungsportal/links/0100; type=int+; label=UID of the Viewer Page
+    viewerPid = 1
+    # cat=plugin.ddb_kitodo_zeitungsportal/links/0100; type=int+; label=UID of the Kitodo.Presentation Configuration Page
+    configPid = 2
+    # cat=plugin.ddb_kitodo_zeitungsportal/links/0100; type=int+; label=UID of the Kitodo.Presentation Solr Core
+    solrCore = 1
+    # cat=plugin.ddb_kitodo_zeitungsportal/links/0100; type=string; label=Page URL on which viewer will be visible incl. trailing slash.
+    baseUrl = http://example.com/
 }

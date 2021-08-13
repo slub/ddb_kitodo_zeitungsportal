@@ -1,35 +1,32 @@
 config {
-  doctype = html5
   disableAllHeaderCode = 1
- 
+
   removeDefaultCss = 1
   removePageCss = 1
   removeDefaultJS = 1
   concatenateJs = 1
- 
+
   no_cache = 0
   cache_clearAtMidnight = 0
   sendCacheHeaders = 1
- 
-  spamProtectEmailAddresses = ascii
-  spamProtectEmailAddresses_atSubst = @
- 
+
   prefixLocalAnchors = all
   absRefPrefix = {$constant.baseUrl}
   linkVars = html(1)
 }
 
-[globalVar = GP:html > 0]
+[traverse(request.getQueryParams(), 'html') > 0]
 config {
   disableAllHeaderCode = 0
   concatenateJs = 0
 }
-[global]
-   
-[globalVar = GP:debug > 0]
+[END]
+
+[traverse(request.getQueryParams(), 'debug') > 0]
 config {
   disableAllHeaderCode = 0
   concatenateJs = 0
   compressJs = 0
+  no_cache = 1
 }
-[global]
+[END]

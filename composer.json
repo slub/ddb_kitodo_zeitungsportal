@@ -1,7 +1,7 @@
 {
   "name": "slub/ddb-kitodo-zeitungsportal",
   "type": "typo3-cms-extension",
-  "description": "Templates, Styles and Configuration for DDB Zeitungsportal",
+  "description": "Templates, Styles and Configuration for DDB Zeitungsportal Viewer",
   "homepage": "https://github.com/slub/ddb-kitodo-zeitungsportal",
   "keywords": [
     "TYPO3",
@@ -22,8 +22,8 @@
   ],
   "license": "GPL-3.0-or-later",
   "require": {
-    "typo3/cms-core": "~9.5.24",
-    "kitodo/presentation": "*"
+    "typo3/cms-core": "~9.5.29",
+    "kitodo/presentation": "^3.3|dev-master|dev-ddb-changes"
   },
   "autoload": {
     "psr-4": {
