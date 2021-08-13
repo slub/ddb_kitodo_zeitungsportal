@@ -30,7 +30,7 @@ module.exports = function(grunt) {
                         // highlight exact word in search results
                         'Resources/Private/JavaScript/Kitodo/PageView/Utility.js',
                         '../dlf/Resources/Public/Javascript/PageView/OL3.js',
-                        '../dlf/Resources/Public/Javascript/PageView/OL3Styles.js',
+                        'Resources/Private/JavaScript/Kitodo/PageView/OL3Styles.js',
                         '../dlf/Resources/Public/Javascript/PageView/OL3Sources.js',
                         '../dlf/Resources/Public/Javascript/PageView/AltoParser.js',
                         '../dlf/Resources/Public/Javascript/PageView/AnnotationParser.js',

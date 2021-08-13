@@ -26,16 +26,6 @@ plugin {
     templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Templates/PageView.html
   }
 
-  tx_dlf_search {
-    pages = {$constant.configPid}
-    fulltext = 1
-    solrcore = {$constant.solrCore}
-    searchIn = document
-    suggest = 0
-    targetPid = {$constant.viewerPid}
-    targetPidPageView = {$constant.viewerPid}
-  }
-
   tx_dlf_tableofcontents {
     pages = {$constant.configPid}
     excludeOther = 0
@@ -43,15 +33,8 @@ plugin {
     templateFile =
   }
 
-  tx_dlf_toolbox {
-    pages = {$constant.configPid}
-    tools =
-    solrcore = {$constant.solrCore}
-    fileGrpsImageDownload = DEFAULT,MAX
-    templateFile =
-  }
-
   tx_dlf_fulltexttool {
+    pages = {$constant.configPid}
     activateFullTextInitially = 1
     fullTextScrollElement = div#tx-dlf-fulltextselection
     searchHlParameters = hl,tx_dlf[highlight_word]
@@ -59,53 +42,29 @@ plugin {
   }
 
   tx_dlf_searchindocumenttool {
+    pages = {$constant.configPid}
     searchUrl = https://dev-ddb.fiz-karlsruhe.de/ddb-current/newspaper/item
     documentIdUrlSchema = https://api-q1.deutsche-digitale-bibliothek.de/items/*id*/source/record
     idInputName = issue_id
     queryInputName = tx_dlf[query]
     startInputName = tx_dlf[start]
     pageInputName = issuepage
-    highlightWordInputName = tx_dlf[highlight_word]
-    encryptedInputName = tx_dlf[encrypted]
     templateFile = EXT:dlf/Resources/Private/Templates/SearchInDocumentTool.tmpl
-  }
-}
-
-lib.fulltext < plugin.tx_dlf_toolbox
-lib.fulltext {
-    userFunc = Kitodo\Dlf\Plugin\Toolbox->main
-    pages = 1
-    tools = tx_dlf_fulltexttool
     solrcore = {$constant.solrCore}
-    fileGrpsImageDownload = DEFAULT,MAX
-    templateFile =
+  }
+
+  tx_dlf_imagemanipulationtool {
+    pages = {$constant.configPid}
+  }
+
 }
 
 lib.download < plugin.tx_dlf_toolbox
 lib.download {
     userFunc = Kitodo\Dlf\Plugin\Toolbox->main
-    pages = 1
+    pages = {$constant.configPid}
     tools = tx_dlf_imagedownloadtool,tx_dlf_pdfdownloadtool,tx_dlf_fulltextdownloadtool
     solrcore = {$constant.solrCore}
     fileGrpsImageDownload = DEFAULT,MAX
     templateFile =
-}
-
-lib.imagemanipulation < plugin.tx_dlf_toolbox
-lib.imagemanipulation {
-    userFunc = Kitodo\Dlf\Plugin\Toolbox->main
-    pages = 1
-    tools = tx_dlf_imagemanipulationtool
-    solrcore = {$constant.solrCore}
-    fileGrpsImageDownload = DEFAULT,MAX
-    templateFile =
-}
-
-lib.search < plugin.tx_dlf_toolbox
-lib.search {
-  userFunc = Kitodo\Dlf\Plugin\Toolbox->main
-  pages = 5
-  tools = tx_dlf_searchindocumenttool
-  fileGrpsImageDownload = DEFAULT,MAX
-  templateFile =
 }
