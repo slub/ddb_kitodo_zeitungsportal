@@ -5,7 +5,7 @@ plugin {
     pages = {$constant.configPid}
     pageStep = 5
     targetPid = {$constant.viewerPid}
-    templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Plugins/Kitodo/Navigation.html
+    templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Plugins/Kitodo/Navigation.tmpl
   }
 
   tx_dlf_pagegrid {
@@ -13,7 +13,7 @@ plugin {
     limit = 1000
     placeholder =
     targetPid = {$constant.viewerPid}
-    templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Plugins/Kitodo/PageGrid.html
+    templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Plugins/Kitodo/PageGrid.tmpl
   }
 
   tx_dlf_pageview {
@@ -23,7 +23,7 @@ plugin {
     elementId = tx-dlf-map
     addJStoBody = 0
     useInternalProxy = 1
-    templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Plugins/Kitodo/PageView.html
+    templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Plugins/Kitodo/PageView.tmpl
   }
 
   tx_dlf_tableofcontents {
@@ -49,7 +49,7 @@ plugin {
     queryInputName = tx_dlf[query]
     startInputName = tx_dlf[start]
     pageInputName = issuepage
-    templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Plugins/Kitodo/SearchInDocumentTool.html
+    templateFile = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Plugins/Kitodo/SearchInDocumentTool.tmpl
     solrcore = {$constant.solrCore}
   }
 
