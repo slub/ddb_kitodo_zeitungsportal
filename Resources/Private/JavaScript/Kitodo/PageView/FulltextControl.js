@@ -342,7 +342,7 @@ dlfViewerFullTextControl.prototype.handleTextBlockElements = function(textblockF
  * @param {any} hoverSourceTextline_
  */
 dlfViewerFullTextControl.prototype.handleTextLineElements = function(textlineFeature, hoverSourceTextline_) {
-    var activeHoverTextBlockEl_ = dlfFullTextUtils.getFeature(hoverSourceTextline_);
+    var activeHoverTextBlockEl_ = dlfFullTextUtils.getFeature(hoverSourceTextline_),
         isFeatureEqualToOldHoverFeature_ = dlfFullTextUtils.isFeatureEqual(activeHoverTextBlockEl_, textlineFeature);
 
     if (!isFeatureEqualToOldHoverFeature_) {
@@ -528,9 +528,9 @@ dlfViewerFullTextControl.prototype.showFulltext = function(features) {
 
     if (features !== undefined) {
         $('#tx-dlf-fulltextselection').children().remove();
-        for (feature of features) {
+        for (var feature of features) {
             var textLines = feature.get('textlines');
-            for (textLine of textLines) {
+            for (var textLine of textLines) {
                 this.appendTextLineSpan(textLine);
             }
             $('#tx-dlf-fulltextselection').append('<br /><br />');
@@ -564,7 +564,7 @@ dlfViewerFullTextControl.prototype.appendTextLineSpan = function(textLine) {
  *
  * @return {string}
  */
- dlfViewerFullTextControl.prototype.getItemForTextLineSpan = function(item) {
+dlfViewerFullTextControl.prototype.getItemForTextLineSpan = function(item) {
     var span = '';
     if (item.get('type') === 'string') {
         span = $('<span class="' + item.get('type') + '" id="' + item.getId() + '"/>');
