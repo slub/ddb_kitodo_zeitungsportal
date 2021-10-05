@@ -28,7 +28,7 @@ module.exports = function(grunt) {
                         '../dlf/Resources/Public/Javascript/OpenLayers/ol3-dlf.js',
                         // Viewer
                         // highlight exact word in search results
-                        'Resources/Private/JavaScript/Kitodo/PageView/Utility.js',
+                        '../dlf/Resources/Public/Javascript/PageView/Utility.js',
                         '../dlf/Resources/Public/Javascript/PageView/OL3.js',
                         'Resources/Private/JavaScript/Kitodo/PageView/OL3Styles.js',
                         '../dlf/Resources/Public/Javascript/PageView/OL3Sources.js',
@@ -44,7 +44,7 @@ module.exports = function(grunt) {
                         'Resources/Private/JavaScript/Kitodo/PageView/SearchInDocument.js',
                         // highlight more than one word separated by ' ' and keeping search
                         // phrase in search field
-                        'Resources/Private/JavaScript/Kitodo/PageView/PageView.js'
+                        '../dlf/Resources/Public/Javascript/PageView/PageView.js'
                     ],
                 }
             }
