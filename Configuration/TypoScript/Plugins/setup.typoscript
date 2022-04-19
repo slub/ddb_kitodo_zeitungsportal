@@ -56,15 +56,14 @@ plugin {
   tx_dlf_imagemanipulationtool {
     pages = {$constant.configPid}
   }
-
 }
 
 lib.download < plugin.tx_dlf_toolbox
 lib.download {
-    userFunc = Kitodo\Dlf\Plugin\Toolbox->main
-    pages = {$constant.configPid}
-    tools = tx_dlf_imagedownloadtool,tx_dlf_pdfdownloadtool,tx_dlf_fulltextdownloadtool
-    solrcore = {$constant.solrCore}
-    fileGrpsImageDownload = DEFAULT,MAX
-    templateFile =
+  userFunc = Kitodo\Dlf\Plugin\Toolbox->main
+  pages = {$constant.configPid}
+  tools = tx_dlf_imagedownloadtool,tx_dlf_pdfdownloadtool,tx_dlf_fulltextdownloadtool
+  solrcore = {$constant.solrCore}
+  fileGrpsImageDownload = DEFAULT,MAX
+  templateFile =
 }
