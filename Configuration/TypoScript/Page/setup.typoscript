@@ -1,27 +1,27 @@
 page = PAGE
 page {
-    10 = FLUIDTEMPLATE
-    10.file = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Templates/Main.html
-    includeJSFooterlibs {
-        ddbKitodoZeitungsportal = EXT:ddb_kitodo_zeitungsportal/Resources/Public/JavaScript/ddbKitodoZeitungsportal.js
-    }
-    typeNum = 0
-    meta {
-        robots = noindex,nofollow
-        viewport = width=device-width, initial-scale=1
-    }
-    jsFooterInline {
-        10 = TEXT
-        10.stdWrap.dataWrap = var viewerUrl = '{$constant.baseUrl}';
-    }
+  10 = FLUIDTEMPLATE
+  10.file = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Templates/Main.html
+  includeJSFooterlibs {
+    ddbKitodoZeitungsportal = EXT:ddb_kitodo_zeitungsportal/Resources/Public/JavaScript/ddbKitodoZeitungsportal.js
+  }
+  typeNum = 0
+  meta {
+    robots = noindex,nofollow
+    viewport = width=device-width, initial-scale=1
+  }
+  jsFooterInline {
+    10 = TEXT
+    10.stdWrap.dataWrap = var viewerUrl = '{$constant.baseUrl}';
+  }
 }
 
 [traverse(request.getQueryParams(), 'debug') > 0]
 page {
-    includeJSLibs {
-        jQuery = EXT:dlf/Resources/Public/Javascript/jQuery/jquery-3.5.1.min.js
-        jQuery.forceOnTop = 1
-        jqueryUiMouseSlider = EXT:dlf/Resources/Public/Javascript/jQueryUI/jquery-ui-mouse-slider-resizable-autocomplete.js
-    }
+  includeJSLibs {
+    jQuery = EXT:dlf/Resources/Public/Javascript/jQuery/jquery-3.5.1.min.js
+    jQuery.forceOnTop = 1
+    jqueryUiMouseSlider = EXT:dlf/Resources/Public/Javascript/jQueryUI/jquery-ui-mouse-slider-resizable-autocomplete.js
+  }
 }
 [END]
