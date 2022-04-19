@@ -10,8 +10,9 @@ When building, `../dlf/` (i.e., a sibling folder of `ddb_kitodo_zeitungsportal`)
 
 ```bash
 cd Build/
+nvm use  # If you use NVM
 npm ci
-npx grunt
+npm run watch
 ```
 
 The result is located at `Resources/Public/JavaScript/ddbKitodoZeitungsportal.js`.

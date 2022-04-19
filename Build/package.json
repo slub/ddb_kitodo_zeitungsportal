@@ -1,18 +1,18 @@
 {
-  "name": "dfg-viewer",
-  "version": "4.0.1",
+  "name": "ddb-kitodo-zeitungsportal",
+  "version": "1.0.0",
   "description": "This TYPO3 extension provides the configuration and setup for the DZB-Viewer",
   "main": "gruntfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "grunt terser",
+    "watch": "grunt watch"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:slub/dfg-viewer.git"
+    "url": "https://github.com/slub/ddb-kitodo-zeitungsportal"
   },
   "author": "Alexander Bigga",
   "license": "GPL-3.0-or-later",
-  "homepage": "https://dfgviewer.de",
   "devDependencies": {
     "grunt": "^1.1.0",
     "grunt-contrib-less": "^2.0.0",
