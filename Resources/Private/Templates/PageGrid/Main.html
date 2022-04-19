@@ -8,6 +8,11 @@
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
 -->
+
+Base template: Kitodo.Presentation v4.0.0
+- Use absolute URLs to page
+- Make tx-dlf-pagegrid-pagination a sibling (not child) of tx-dlf-pagegrid-thumbnail
+
 </f:comment>
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       data-namespace-typo3-fluid="true">
@@ -18,7 +23,7 @@
                 <f:for each="{paginatedEntries}" as="entry" iteration="iterator">
                     <li class="tx-dlf-pagegrid-{entry.state}" value="{entry.page}">
                         <div class="tx-dlf-pagegrid-thumbnail">
-                            <f:link.page pageUid="{settings.targetPid}" additionalParams="{'tx_dlf[id]': docUid, 'tx_dlf[page]': entry.page}">
+                            <f:link.page absolute="1" pageUid="{settings.targetPid}" additionalParams="{'tx_dlf[id]': docUid, 'tx_dlf[page]': entry.page}">
                                 <f:if condition="{entry.thumbnail}">
                                     <f:then>
                                         <img src="{entry.thumbnail}" alt="{f:translate(key: 'thumbnail')} {f:translate(key: 'page')} {entry.pagination}" title="{f:translate(key: 'page')} {entry.pagination}" />
@@ -34,9 +39,9 @@
                                         </f:if>
                                     </f:else>
                                 </f:if>
-                                <div class="tx-dlf-pagegrid-pagination">{entry.pagination}</div>
                             </f:link.page>
                         </div>
+                        <div class="tx-dlf-pagegrid-pagination">{entry.pagination}</div>
                     </li>
                 </f:for>
             </ol>
