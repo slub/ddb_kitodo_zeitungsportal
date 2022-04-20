@@ -1,13 +1,20 @@
 # DDB Kitodo Zeitungsportal
-TYPO3 extension to simplify work with Kitodo.Presentation at DDB-Zeitungsportal
 
-## Create unified JavaScript build.
+TYPO3 extension to simplify work with and make adjustments to Kitodo.Presentation at [DDB-Zeitungsportal](https://www.deutsche-digitale-bibliothek.de/newspaper/).
 
-1. Goto Build/ directory
-2. Install all required NPM packages: npm install
-3. Run Grunt: npx grunt
+The JavaScript build is currently based on v3.3.0 of Kitodo.Presentation.
 
-The result is located at `Resources/Public/JavaScript/DdbKitodoZeitungsportal.js
+## Create unified JavaScript build
+
+When building, `../dlf/` (i.e., a sibling folder of `ddb_kitodo_zeitungsportal`) must point to the code of Kitodo.Presentation that you want to use.
+
+```bash
+cd Build/
+npm ci
+npx grunt
+```
+
+The result is located at `Resources/Public/JavaScript/ddbKitodoZeitungsportal.js`.
 
 ## Include TypoScript Template of ddb_kitodo_zeitungsportal
 
