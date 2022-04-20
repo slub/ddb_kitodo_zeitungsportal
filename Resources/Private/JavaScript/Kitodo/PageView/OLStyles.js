@@ -11,7 +11,7 @@
 /**
  * @return {ol.style.Style}
  */
-dlfViewerOL3Styles.textlineStyle = function() {
+dlfViewerOLStyles.textlineStyle = function() {
 
     return new ol.style.Style({
         'stroke': new ol.style.Stroke({
@@ -25,7 +25,7 @@ dlfViewerOL3Styles.textlineStyle = function() {
 /**
  * @return {ol.style.Style}
  */
-dlfViewerOL3Styles.wordStyle = function() {
+dlfViewerOLStyles.wordStyle = function() {
 
     return new ol.style.Style({
         'stroke': new ol.style.Stroke({
