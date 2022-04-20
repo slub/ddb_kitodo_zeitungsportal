@@ -37,7 +37,8 @@ module.exports = function(grunt) {
                         '../dlf/Resources/Public/Javascript/PageView/AnnotationControl.js',
                         '../dlf/Resources/Public/Javascript/PageView/ImageManipulationControl.js',
                         '../dlf/Resources/Public/Javascript/PageView/FulltextDownloadControl.js',
-                        // custom scrolling
+                        // custom scrolling - extend and override base FulltextControl
+                        '../dlf/Resources/Public/Javascript/PageView/FulltextControl.js',
                         'Resources/Private/JavaScript/Kitodo/PageView/FulltextControl.js',
                         '../dlf/Resources/Public/Javascript/PageView/FullTextUtility.js',
                         // use standard input instead of submit button
