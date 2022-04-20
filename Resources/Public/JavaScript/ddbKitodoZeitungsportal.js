@@ -40,7 +40,17 @@ ol.Map.prototype.getZoom=function(){return this.getView().getZoom()};ol.Map.prot
  * For the full copyright and license information, please read the
  * LICENSE.txt file that was distributed with this source code.
  */
-dlfViewerOL3Styles={};dlfViewerOL3Styles.defaultStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(204,204,204,0.8)",width:3}),fill:new ol.style.Fill({color:"rgba(170,0,0,0.1)"})})};dlfViewerOL3Styles.hoverStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(204,204,204,0.8)",width:1}),fill:new ol.style.Fill({color:"rgba(238,153,0,0.2)"})})};dlfViewerOL3Styles.invisibleStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(170,0,0,0)",width:1})})};dlfViewerOL3Styles.selectStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(170,0,0,0.8)",width:1}),fill:new ol.style.Fill({color:"rgba(238,153,0,0.2)"})})};dlfViewerOL3Styles.textlineStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(0,59,80,1)",width:1})})};dlfViewerOL3Styles.wordStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(0,59,80,0.8)",width:1}),fill:new ol.style.Fill({color:"rgba(0,59,80,0.25)"})})};
+dlfViewerOL3Styles={};dlfViewerOL3Styles.defaultStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(204,204,204,0.8)",width:3}),fill:new ol.style.Fill({color:"rgba(170,0,0,0.1)"})})};dlfViewerOL3Styles.hoverStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(204,204,204,0.8)",width:1}),fill:new ol.style.Fill({color:"rgba(238,153,0,0.2)"})})};dlfViewerOL3Styles.invisibleStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(170,0,0,0)",width:1})})};dlfViewerOL3Styles.selectStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(170,0,0,0.8)",width:1}),fill:new ol.style.Fill({color:"rgba(238,153,0,0.2)"})})};dlfViewerOL3Styles.textlineStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(170,0,0,1)",width:1})})};dlfViewerOL3Styles.wordStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(238,153,0,0.8)",width:1}),fill:new ol.style.Fill({color:"rgba(238,153,0,0.2)"})})};
+/**
+ * (c) Kitodo. Key to digital objects e.V. <contact@kitodo.org>
+ *
+ * This file is part of the Kitodo and TYPO3 projects.
+ *
+ * @license GNU General Public License version 3 or later.
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ */
+dlfViewerOL3Styles.textlineStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(0,59,80,1)",width:1})})};dlfViewerOL3Styles.wordStyle=function(){return new ol.style.Style({stroke:new ol.style.Stroke({color:"rgba(0,59,80,0.8)",width:1}),fill:new ol.style.Fill({color:"rgba(0,59,80,0.25)"})})};
 /**
  * (c) Kitodo. Key to digital objects e.V. <contact@kitodo.org>
  *
