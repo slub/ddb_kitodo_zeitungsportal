@@ -24,16 +24,15 @@ module.exports = function(grunt) {
                 files: {
                     "Resources/Public/JavaScript/ddbKitodoZeitungsportal.js" : [
                         '../dlf/Resources/Public/Javascript/jQueryUI/jquery-ui-mouse-slider-resizable-autocomplete.js',
-                        '../dlf/Resources/Public/Javascript/OpenLayers/glif.min.js',
-                        '../dlf/Resources/Public/Javascript/OpenLayers/ol3-dlf.js',
+                        '../dlf/Resources/Public/Javascript/OpenLayers/openlayers.js',
                         // Viewer
                         // highlight exact word in search results
                         '../dlf/Resources/Public/Javascript/PageView/Utility.js',
-                        '../dlf/Resources/Public/Javascript/PageView/OL3.js',
+                        '../dlf/Resources/Public/Javascript/PageView/OL.js',
                         // Override text highlighting color
-                        '../dlf/Resources/Public/Javascript/PageView/OL3Styles.js',
-                        'Resources/Private/JavaScript/Kitodo/PageView/OL3Styles.js',
-                        '../dlf/Resources/Public/Javascript/PageView/OL3Sources.js',
+                        '../dlf/Resources/Public/Javascript/PageView/OLStyles.js',
+                        'Resources/Private/JavaScript/Kitodo/PageView/OLStyles.js',
+                        '../dlf/Resources/Public/Javascript/PageView/OLSources.js',
                         '../dlf/Resources/Public/Javascript/PageView/AltoParser.js',
                         '../dlf/Resources/Public/Javascript/PageView/AnnotationParser.js',
                         '../dlf/Resources/Public/Javascript/PageView/AnnotationControl.js',

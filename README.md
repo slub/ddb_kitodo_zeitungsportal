@@ -2,7 +2,7 @@
 
 TYPO3 extension to simplify work with and make adjustments to Kitodo.Presentation at [DDB-Zeitungsportal](https://www.deutsche-digitale-bibliothek.de/newspaper/).
 
-The JavaScript build is currently based on v3.3.4 of Kitodo.Presentation.
+The JavaScript build is currently based on v4.0.1 of Kitodo.Presentation.
 
 ## Create unified JavaScript build
 
