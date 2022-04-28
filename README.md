@@ -23,5 +23,10 @@ The result is located at `Resources/Public/JavaScript/ddbKitodoZeitungsportal.js
 
 Example of dlf part of configuration from LocalConfiguration.php file is available [here](Documentation/LocalConfiguration.md). It can be used as a template for plugin configuration after the installation.
 
+## Upgrade to Kitodo.Presentation 4 (preliminary)
+
+- Upgrade package via Composer
+- Run `typo3cms database:updateschema`
+
 ## Maintainer
 typo3@slub-dresden.de
