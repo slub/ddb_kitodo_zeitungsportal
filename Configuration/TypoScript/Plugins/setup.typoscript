@@ -6,6 +6,14 @@ plugin {
 }
 
 plugin.tx_dlf {
+  persistence {
+    storagePid = {$constants.configPid}
+  }
+
+  settings {
+    storagePid = {$constants.configPid}
+  }
+
   view {
     templateRootPaths {
       10 = EXT:ddb_kitodo_zeitungsportal/Resources/Private/Templates
