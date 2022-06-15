@@ -4,7 +4,7 @@ TYPO3 extension to simplify work with and make adjustments to Kitodo.Presentatio
 
 The JavaScript build is based on v4.0.1 (commit 6443a06) of Kitodo.Presentation.
 
-## Create unified JavaScript build
+## Create unified JavaScript/CSS build
 
 When building, `../dlf/` (i.e., a sibling folder of `ddb_kitodo_zeitungsportal`) must point to the code of Kitodo.Presentation that you want to use.
 
@@ -12,10 +12,13 @@ When building, `../dlf/` (i.e., a sibling folder of `ddb_kitodo_zeitungsportal`)
 cd Build/
 nvm use  # If you use NVM
 npm ci
-npm run watch
+npm run build
+npm run watch  # (Alternative) Watch Mode
 ```
 
-The result is located at `Resources/Public/JavaScript/ddbKitodoZeitungsportal.js`.
+This builds:
+- `Resources/Public/JavaScript/ddbKitodoZeitungsportal.js`
+- `Resources/Public/Css/ddbKitodoZeitungsportal.css`
 
 ## Include TypoScript Template of ddb_kitodo_zeitungsportal
 

@@ -8,6 +8,9 @@ page {
   includeJSFooterlibs {
     ddbKitodoZeitungsportal = EXT:ddb_kitodo_zeitungsportal/Resources/Public/JavaScript/ddbKitodoZeitungsportal.js
   }
+  includeCSS {
+    ddbKitodoZeitungsportal = EXT:ddb_kitodo_zeitungsportal/Resources/Public/Css/ddbKitodoZeitungsportal.css
+  }
   typeNum = 0
   meta {
     robots = noindex,nofollow

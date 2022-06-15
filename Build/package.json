@@ -4,7 +4,7 @@
   "description": "This TYPO3 extension provides the configuration and setup for the DZB-Viewer",
   "main": "gruntfile.js",
   "scripts": {
-    "build": "grunt terser",
+    "build": "grunt terser less",
     "watch": "grunt watch"
   },
   "repository": {

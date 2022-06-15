@@ -12,7 +12,10 @@ module.exports = function(grunt) {
                     optimization: 2
                 },
                 files: {
-                    "Resources/Public/Css/ddbKitodoZeitungsportal.css" : "Resources/Private/Less/all.less"
+                    "Resources/Public/Css/ddbKitodoZeitungsportal.css" : [
+                        "../dlf/Resources/Public/Javascript/OpenLayers/openlayers.css",
+                        "Resources/Private/Less/all.less",
+                    ],
                 }
             }
         },
