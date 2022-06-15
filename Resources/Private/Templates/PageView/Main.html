@@ -20,7 +20,16 @@ Base template: Kitodo.Presentation v4.0
       xmlns:kitodo="http://typo3.org/ns/Kitodo/Dlf/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
-<div id="tx-dlf-map" class="tx-dlf-map" data-dic="overview-map:{f:translate(key: 'pageview.overview-map', extensionName: 'dlf')}"></div>
+<f:comment>Hide progress bar until stylesheet is loaded</f:comment>
+<style type="text/css">
+    .tx-dlf-page-progress {
+        display: none;
+    }
+</style>
+
+<div id="tx-dlf-map" class="tx-dlf-map" data-dic="overview-map:{f:translate(key: 'pageview.overview-map', extensionName: 'dlf')}">
+    <progress id="tx-dlf-page-progress" class="tx-dlf-page-progress"></progress>
+</div>
 
 <kitodo:jsFooter inlineCode="{viewerConfiguration}" />
 

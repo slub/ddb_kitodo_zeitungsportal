@@ -11,3 +11,36 @@
 body.full-screen .ol-overviewmap {
     bottom: 15px;
 }
+
+.tx-dlf-map {
+    .tx-dlf-page-progress {
+        display: none;
+        &.loading:not(:indeterminate) {
+            display: block;
+        }
+
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0;
+        width: 100%;
+        height: 5px;
+
+        -webkit-appearance: none;
+        appearance: none;
+
+        border: none;
+        border-radius: 0px;
+        background: transparent;
+
+        &::-moz-progress-bar {
+            background-color: #0096cc;
+        }
+    }
+    ::-webkit-progress-value {
+        background-color: #0096cc;
+    }
+    ::-webkit-progress-bar {
+        background-color: transparent;
+    }
+}

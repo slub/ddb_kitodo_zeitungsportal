@@ -49,6 +49,7 @@ plugin {
   tx_dlf_pageview {
     settings {
       elementId = tx-dlf-map
+      progressElementId = tx-dlf-page-progress
       features = OverviewMap
       useInternalProxy = 1
       // The request needs to be resolved from the frontend URL
