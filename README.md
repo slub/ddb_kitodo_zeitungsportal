@@ -29,4 +29,27 @@ Example of dlf part of configuration from LocalConfiguration.php file is availab
 ## Upgrade to Kitodo.Presentation 4 (preliminary)
 
 - Upgrade package via Composer
-- Run `typo3cms database:updateschema`
+- In `LocalConfiguration.php`:
+  ```php
+  'FE' => [
+      'cacheHash' => [
+          'requireCacheHashPresenceParameters' => [
+              'tx_dlf[id]',
+          ],
+      ],
+  ],
+  ```
+  This could be set in command line:
+  ```bash
+  vendor/bin/typo3cms configuration:set --json 'FE/cacheHash/requireCacheHashPresenceParameters' '["tx_dlf[id]"]'
+  ```
+- Update database:
+  - `vendor/bin/typo3cms database:updateschema`
+- Update setup of viewer template:
+  ```typoscript
+  // Before
+  plugin.tx_dlf_searchindocumenttool.documentIdUrlSchema = ...
+
+  // After
+  plugin.tx_dlf_searchindocumenttool.settings.documentIdUrlSchema = ...
+  ```
