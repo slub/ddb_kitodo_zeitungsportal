@@ -13,6 +13,7 @@ Base template: Kitodo.Presentation v4.0.0
 - Remove tx-dlf-annotationselection
 - Remove ov_map
 - Remove basket part
+- Overview Map positioning
 
 </f:comment>
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
@@ -22,5 +23,22 @@ Base template: Kitodo.Presentation v4.0.0
 <div id="tx-dlf-map" class="tx-dlf-map"></div>
 
 <kitodo:jsFooter inlineCode="{viewerConfiguration}" />
+
+<script>
+    // Hack to allow positioning the overview map in DDB frontend
+    // (Correct height of pageview wrapper when the newspaper title spans multiple lines)
+    function resizePageviewWrapper() {
+        var header = document.querySelector('#viewer-navigation-bar');
+        var footer = document.querySelector('footer.footer-newspaper');
+        var container = document.querySelector('#pageview-wrapper');
+
+        if (header && footer && container) {
+            container.style.height = (footer.getBoundingClientRect().top - header.getBoundingClientRect().bottom) + 'px';
+        }
+    }
+
+    $(window).on('map-loadend', resizePageviewWrapper);
+    window.addEventListener('resize', resizePageviewWrapper);
+</script>
 
 </html>
