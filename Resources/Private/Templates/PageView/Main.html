@@ -9,7 +9,7 @@
  * LICENSE.txt file that was distributed with this source code.
 -->
 
-Base template: Kitodo.Presentation v4.0.0
+Base template: Kitodo.Presentation v4.0
 - Remove tx-dlf-annotationselection
 - Remove ov_map
 - Remove basket part
@@ -20,7 +20,7 @@ Base template: Kitodo.Presentation v4.0.0
       xmlns:kitodo="http://typo3.org/ns/Kitodo/Dlf/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
-<div id="tx-dlf-map" class="tx-dlf-map"></div>
+<div id="tx-dlf-map" class="tx-dlf-map" data-dic="overview-map:{f:translate(key: 'pageview.overview-map', extensionName: 'dlf')}"></div>
 
 <kitodo:jsFooter inlineCode="{viewerConfiguration}" />
 
