@@ -127,6 +127,8 @@ function getAllQueryParams(baseUrl, queryParams) {
  * (id is included in main URL, not in parameter).
  * // TODO: make it more flexible
  *
+ * // NOTE: Don't use this in Zeitungsportal - uid is in URL ("slug"), page is in query ("no slug")
+ *
  * @param {array} element
  *
  * @returns {string}
@@ -151,17 +153,19 @@ function getNeededQueryParams(element) {
 
     var queryParams = [];
 
-    if(id && !isUrlConfiguredAsSlug(element)) {
-        queryParams.push(id);
-        queryParams[id] = element['uid'];
-    }
+    // NOTE: Omit in Zeitungsportal
+    // if(id && !isUrlConfiguredAsSlug(element)) {
+    //     queryParams.push(id);
+    //     queryParams[id] = element['uid'];
+    // }
 
     if(highlightWord) {
         queryParams.push(highlightWord);
         queryParams[highlightWord] = encodeURIComponent($("input[id='tx-dlf-search-in-document-query']").val());
     }
 
-    if(page && !isUrlConfiguredAsSlug(element)) {
+    // NOTE: Always do this in Zeitungsportal
+    if(page /* && !isUrlConfiguredAsSlug(element) */) {
         queryParams.push(page);
         queryParams[page] = element['page'];
     }
