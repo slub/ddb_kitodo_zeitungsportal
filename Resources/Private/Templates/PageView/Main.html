@@ -37,7 +37,15 @@ Base template: Kitodo.Presentation v4.0
         }
     }
 
-    $(window).on('map-loadend', resizePageviewWrapper);
+    $(window).on('map-loadend', function () {
+        resizePageviewWrapper();
+
+        // DDB 7.3 calls addControl when switching to full screen, which distracts the OverviewMap control
+        tx_dlf_viewer.map.addControl = function () {
+            console.error("addControl is disabled");
+        };
+    });
+
     window.addEventListener('resize', resizePageviewWrapper);
 </script>
 
