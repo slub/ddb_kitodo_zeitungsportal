@@ -49,7 +49,9 @@ module.exports = function(grunt) {
                         'Resources/Private/JavaScript/Kitodo/PageView/SearchInDocument.js',
                         // highlight more than one word separated by ' ' and keeping search
                         // phrase in search field
-                        '../dlf/Resources/Public/Javascript/PageView/PageView.js'
+                        '../dlf/Resources/Public/Javascript/PageView/PageView.js',
+                        // Customize OverviewMap control
+                        'Resources/Private/JavaScript/Kitodo/PageView/PageView.js'
                     ],
                 }
             }

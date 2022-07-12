@@ -1,11 +1,54 @@
+// Color from DDB frontend
+@ovControlColor: #0096cc;
+
 .ol-overviewmap {
     // Overwrite .ol-control styling
     display: block;
-    position: absolute !important;
+    position: fixed !important;
+    background: none !important;
 
-    // 15px is the width of the #arrow-button-div
-    left: 15px;
-    bottom: 0px;
+    left: unset;
+    right: 10px;
+    // Footer is 50px
+    bottom: 60px;
+
+    .ol-overviewmap-map {
+        // In PageView, we want to set the actual image size
+        box-sizing: content-box;
+        border: 3px solid @ovControlColor;
+        border-radius: 2px;
+    }
+
+    .ol-overviewmap-box {
+        // Use fill from dlfViewerOLStyles.defaultStyle() as background
+        background-color: rgba(170, 0, 0, 0.1);
+        border: 1px solid rgba(170, 0, 0, 0.4) !important;
+    }
+
+    button {
+        position: absolute;
+        left: unset;
+        // Slightly offset the toggle button against the map
+        right: -1px;
+        bottom: -1px;
+
+        &,
+        &:hover,
+        &:active {
+            background: @ovControlColor !important;
+            opacity: 1;
+        }
+
+        span {
+            background: none;
+        }
+    }
+
+    &:not(.ol-collapsed) button {
+        left: unset;
+        right: -1px;
+        bottom: -1px;
+    }
 }
 
 body.full-screen .ol-overviewmap {
