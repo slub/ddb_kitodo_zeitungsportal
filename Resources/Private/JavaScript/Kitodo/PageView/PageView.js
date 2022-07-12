@@ -57,6 +57,21 @@ if (typeof ddbKitodoZeitungsportalViewer === 'undefined') {
                 })
             });
 
+            var dic = this.dic;
+            var button = ovmap.element.querySelector('button');
+            if (button !== null) {
+                var updateTooltip = function () {
+                    if (ovmap.getCollapsed()) {
+                        button.title = dic['overview-map.show'];
+                    } else {
+                        button.title = dic['overview-map.hide'];
+                    }
+                };
+
+                button.addEventListener('click', updateTooltip);
+                updateTooltip();
+            }
+
             // Resize the overview map to fit the page size, assuming a fixed width
             $(window).on('map-loadend', function () {
                 var map = document.querySelector('.ol-overviewmap-map');

@@ -5,6 +5,18 @@ plugin {
   tx_dlf.useragent = DDB/Zeitungsportal
 }
 
+plugin.tx_ddb_kitodo_zeitungsportal {
+  _LOCAL_LANG.default {
+    pageview.overview-map.show = Show navigator
+    pageview.overview-map.hide = Hide navigator
+  }
+
+  _LOCAL_LANG.de {
+    pageview.overview-map.show = Navigator einblenden
+    pageview.overview-map.hide = Navigator ausblenden
+  }
+}
+
 plugin.tx_dlf {
   persistence {
     storagePid = {$constants.configPid}
