@@ -9,10 +9,12 @@
  */
 if (typeof ddbKitodoZeitungsportalViewer === 'undefined') {
     class ddbKitodoZeitungsportalViewer extends dlfViewer {
-        createControls_(controlNames, layers) {
-            return [
-                this.createOverviewMap(layers)
-            ];
+        createControl(controlName, layers) {
+            if (controlName === 'OverviewMap') {
+                return this.createOverviewMap(layers);
+            } else {
+                return super.createControl(controlName, layers);
+            }
         }
 
         /**

@@ -2,7 +2,7 @@
 
 TYPO3 extension to simplify work with and make adjustments to Kitodo.Presentation at [DDB-Zeitungsportal](https://www.deutsche-digitale-bibliothek.de/newspaper/).
 
-The JavaScript build is based on v4.0.1 (commit 6443a06) of Kitodo.Presentation.
+The JavaScript build is based on v4.0.1 (commit d8be5dd) of Kitodo.Presentation.
 
 ## Create unified JavaScript/CSS build
 
@@ -49,9 +49,11 @@ Example of dlf part of configuration from LocalConfiguration.php file is availab
   ```typoscript
   // Before
   plugin.tx_dlf_searchindocumenttool.documentIdUrlSchema = ...
+  plugin.tx_dlf_searchindocumenttool.searchUrl = ...
 
   // After
   plugin.tx_dlf_searchindocumenttool.settings.documentIdUrlSchema = ...
+  plugin.tx_dlf_searchindocumenttool.settings.searchUrl = ...
   ```
 
 ## Maintainer
