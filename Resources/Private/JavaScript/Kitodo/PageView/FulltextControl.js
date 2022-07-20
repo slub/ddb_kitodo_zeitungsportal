@@ -10,6 +10,9 @@
 
 // The frontend may load the JS multiple times (TODO...), so avoid redeclaration
 if (typeof ddbKitodoZeitungsportalFullTextControl === 'undefined') {
+    /**
+     * TODO: This can probably be simplified or partly merged into Kitodo
+     */
     class ddbKitodoZeitungsportalFullTextControl extends dlfViewerFullTextControl {
         constructor(map, image, fulltextUrl) {
             super(map, image, fulltextUrl);
@@ -30,11 +33,13 @@ if (typeof ddbKitodoZeitungsportalFullTextControl === 'undefined') {
              * @type {string}
              * @private
              */
-            this.lastHeight;
+            this.lastWidth;
         }
 
         /**
-         * Allow accessing positions in a method that is called in base constructor.
+         * This getter allows to access and initialize `this.positions_` in a method called from base class constructor
+         * (via `activate()` -> `showFulltext()` -> `calculatePositions()`).
+         *
          * @private
          */
         get positions() {
@@ -46,11 +51,12 @@ if (typeof ddbKitodoZeitungsportalFullTextControl === 'undefined') {
         }
 
         /**
-         * Recalculate position of text lines if full text container was resized
+         * The fulltext container in DZP frontend can be resized horizontally,
+         * so check if we need to recalculate positions.
          */
         onResize() {
-            if (this.element != undefined && this.element.css('width') != this.lastHeight) {
-                this.lastHeight = this.element.css('width');
+            if (this.element != undefined && this.element.css('width') != this.lastWidth) {
+                this.lastWidth = this.element.css('width');
                 this.calculatePositions();
             }
         }

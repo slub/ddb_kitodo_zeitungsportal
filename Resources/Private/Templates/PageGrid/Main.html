@@ -23,6 +23,7 @@ Base template: Kitodo.Presentation v4.0.0
                 <f:for each="{paginatedEntries}" as="entry" iteration="iterator">
                     <li class="tx-dlf-pagegrid-{entry.state}" value="{entry.page}">
                         <div class="tx-dlf-pagegrid-thumbnail">
+                            <f:comment>Correct link generation is also relevant for numbering in page switcher in frontend</f:comment>
                             <f:link.page absolute="1" pageUid="{settings.targetPid}" additionalParams="{'tx_dlf[id]': docUid, 'tx_dlf[page]': entry.page}">
                                 <f:if condition="{entry.thumbnail}">
                                     <f:then>
