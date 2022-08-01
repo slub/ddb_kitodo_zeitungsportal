@@ -26,8 +26,9 @@ module.exports = function(grunt) {
                 },
                 files: {
                     "Resources/Public/JavaScript/ddbKitodoZeitungsportal.js" : [
-                        '../dlf/Resources/Public/JavaScript/jQueryUI/jquery-ui-mouse-slider-resizable-autocomplete.js',
-                        '../dlf/Resources/Public/JavaScript/OpenLayers/openlayers.js',
+                        'Resources/Private/JavaScript/hackEvalOnlyOnce.js',
+                        '../dlf/Resources/Public/Javascript/jQueryUI/jquery-ui-mouse-slider-resizable-autocomplete.js',
+                        '../dlf/Resources/Public/Javascript/OpenLayers/openlayers.js',
                         // Viewer
                         // highlight exact word in search results
                         '../dlf/Resources/Public/JavaScript/PageView/Utility.js',
