@@ -112,9 +112,22 @@ if (typeof ddbKitodoZeitungsportalFullTextControl === 'undefined') {
         activate() {
             super.activate();
 
+            if (!this.ddbOnMapClick_) {
+                this.ddbOnMapClick_ = this.ddbOnMapClick.bind(this);
+            }
+            this.map.on('click', this.ddbOnMapClick_);
+
             if (this.element === undefined) {
                 this.element = $(this.fullTextScrollElement);
             }
+        }
+
+        /**
+         * @override
+         */
+        deactivate() {
+            super.deactivate();
+            this.map.un('click', this.ddbOnMapClick_);
         }
 
         /**
@@ -125,6 +138,26 @@ if (typeof ddbKitodoZeitungsportalFullTextControl === 'undefined') {
 
             if (features !== undefined) {
                 this.calculatePositions();
+            }
+        }
+
+        /**
+         * @override
+         */
+        ddbOnMapClick(event) {
+            const mouseCoordinate = this.map.getCoordinateFromPixel(event['pixel']);
+            const textlineFeature = this.textlines_.coordinateToFeature(mouseCoordinate);
+            const fullTextButton = document.getElementById('fulltext-button');
+
+            // Switch to fulltext tab in DDB frontend and highlight line (which otherwise only happens on hover)
+            // - fullTextLoad is a function from DDB to activate the search tab
+            // - When the tab is active, the ID of the button is fulltext-button-active, so the condition pans out
+            if (textlineFeature && typeof fullTextLoad === 'function' && fullTextButton !== null) {
+                fullTextLoad(fullTextButton);
+                this.handlers_.mapHover({
+                    pixel: [Number.POSITIVE_INFINITY, Number.POSITIVE_INFINITY],
+                });
+                this.handlers_.mapHover(event);
             }
         }
     }
