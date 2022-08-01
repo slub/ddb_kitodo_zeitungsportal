@@ -226,7 +226,7 @@ function getLink(element) {
 
     // add query params to result link
     for(var i = 0; i < queryParams.length; i++) {
-        link += queryParams[i] + '=' + queryParams[queryParams[i]] + '&';
+        link += encodeURIComponent(queryParams[i]) + '=' + queryParams[queryParams[i]] + '&';
     }
     link = link.slice(0, -1);
     return link;
