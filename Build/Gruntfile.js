@@ -47,8 +47,7 @@ module.exports = function(grunt) {
                         '../dlf/Resources/Public/JavaScript/PageView/FullTextUtility.js',
                         // use standard input instead of submit button
                         'Resources/Private/JavaScript/Kitodo/PageView/SearchInDocument.js',
-                        // highlight more than one word separated by ' ' and keeping search
-                        // phrase in search field
+                        // highlight more than one word separated by ' ' and keeping search phrase in search field
                         '../dlf/Resources/Public/JavaScript/PageView/PageView.js',
                         // Customize OverviewMap control
                         'Resources/Private/JavaScript/Kitodo/PageView/PageView.js'
@@ -58,14 +57,20 @@ module.exports = function(grunt) {
         },
         watch: {
             styles: {
-                files: ['Resources/Private/Less/**/*.less'],
+                files: [
+                    'Resources/Private/Less/**/*.less',
+                    '../dlf/Resources/Public/JavaScript/**/*.css'
+                ],
                 tasks: ['less'],
                 options: {
                     spawn: false
                 }
             },
             js: {
-                files: ['Resources/Private/JavaScript/**/*.js'],
+                files: [
+                    'Resources/Private/JavaScript/**/*.js',
+                    '../dlf/Resources/Public/JavaScript/**/*.js'
+                ],
                 tasks: ['terser'],
                 options: {
                     spawn: false
