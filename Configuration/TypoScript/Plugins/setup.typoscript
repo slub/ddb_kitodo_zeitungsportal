@@ -75,6 +75,16 @@ plugin {
     settings {
       excludeOther = 0
       targetPid = {$constant.viewerPid}
+      titleReplacements {
+          0 {
+              type = issue
+              fields = type,year
+          }
+          1 {
+              type = volume
+              fields = type,volume
+          }
+      }
     }
   }
 
@@ -96,11 +106,13 @@ plugin {
       tools = searchindocumenttool
       searchUrl = https://dev-ddb.fiz-karlsruhe.de/ddb-current/newspaper/item
       documentIdUrlSchema = https://api-q1.deutsche-digitale-bibliothek.de/items/*id*/source/record
-      idInputName = issue_id
+      idInputName = tx_dlf[id]
+      pidInputName = tx_dlf[pid]
       queryInputName = tx_dlf[query]
       startInputName = tx_dlf[start]
-      pageInputName = issuepage
+      pageInputName = tx_dlf[page]
       highlightWordInputName = tx_dlf[highlight_word]
+      encryptedInputName = tx_dlf[encrypted]
       solrcore = {$constant.solrCore}
     }
   }
