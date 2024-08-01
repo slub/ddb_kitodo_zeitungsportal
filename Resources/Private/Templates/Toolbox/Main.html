@@ -23,7 +23,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
-<f:if condition="{renderSearchindocumentTool} && {searchInDocument}">
+<f:if condition="{renderSearchInDocumentTool} && {searchInDocument}">
     <f:then>
         <div class="tx-dlf-searchindocumenttool">
             <li>
@@ -86,7 +86,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
                     </f:then>
                 </f:if>
 
-                <f:if condition="{renderImagemanipulationTool}">
+                <f:if condition="{renderImageManipulationTool}">
                     <f:then>
                         <li>
                             <span class="tx-dlf-tools-imagetools" id="tx-dlf-tools-imagetools"
@@ -97,7 +97,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
                     </f:then>
                 </f:if>
 
-                <f:if condition="{renderImagedownloadTool} && {imageDownload}">
+                <f:if condition="{renderImageDownloadTool} && {imageDownload}">
                     <f:then>
                         <li>
                             <div> <!-- Zeitungsportal -->
@@ -151,7 +151,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
                     </f:then>
                 </f:if>
 
-                <f:if condition="{renderPdfdownloadTool}">
+                <f:if condition="{renderPdfDownloadTool}">
                     <f:then>
                         <f:if condition="{pageLinks}">
                             <f:then>
@@ -198,7 +198,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
                     </f:then>
                 </f:if>
 
-                <f:if condition="{renderFulltextdownloadTool}">
+                <f:if condition="{renderFulltextDownloadTool}">
                     <f:then>
                         <li>
                             <div> <!-- Zeitungsportal -->
