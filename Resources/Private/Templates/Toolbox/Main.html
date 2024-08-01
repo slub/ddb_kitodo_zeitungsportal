@@ -23,7 +23,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
-<f:if condition="{searchindocumenttool} && {searchInDocument}">
+<f:if condition="{renderSearchindocumentTool} && {searchInDocument}">
     <f:then>
         <div class="tx-dlf-searchindocumenttool">
             <li>
@@ -65,7 +65,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
     <f:else>
         <div class="tx-dlf-toolbox"> <!-- Zeitungsportal -->
             <ul>
-                <f:if condition="{annotationtool}">
+                <f:if condition="{renderAnnotationTool}">
                     <f:then>
                         <li>
                             <span class="tx-dlf-tools-annotations">
@@ -86,7 +86,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
                     </f:then>
                 </f:if>
 
-                <f:if condition="{imagemanipulationtool}">
+                <f:if condition="{renderImagemanipulationTool}">
                     <f:then>
                         <li>
                             <span class="tx-dlf-tools-imagetools" id="tx-dlf-tools-imagetools"
@@ -97,7 +97,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
                     </f:then>
                 </f:if>
 
-                <f:if condition="{imagedownloadtool} && {imageDownload}">
+                <f:if condition="{renderImagedownloadTool} && {imageDownload}">
                     <f:then>
                         <li>
                             <div> <!-- Zeitungsportal -->
@@ -151,7 +151,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
                     </f:then>
                 </f:if>
 
-                <f:if condition="{pdfdownloadtool}">
+                <f:if condition="{renderPdfdownloadTool}">
                     <f:then>
                         <f:if condition="{pageLinks}">
                             <f:then>
@@ -198,7 +198,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
                     </f:then>
                 </f:if>
 
-                <f:if condition="{fulltextdownloadtool}">
+                <f:if condition="{renderFulltextdownloadTool}">
                     <f:then>
                         <li>
                             <div> <!-- Zeitungsportal -->
@@ -225,4 +225,5 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
         </div>
     </f:else>
 </f:if>
+
 </html>
