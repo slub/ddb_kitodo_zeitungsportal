@@ -19,7 +19,7 @@ function nextResultPage() {
     var newStart = parseInt(currentStart) + 20;
     $("#tx-dlf-search-in-document-form input[id='tx-dlf-search-in-document-start']").val(newStart);
     $('#tx-dlf-search-in-document-form').submit();
-};
+}
 
 /**
  * This function decreases the start parameter of the search form and submits
@@ -32,7 +32,7 @@ function previousResultPage() {
     var newStart = (parseInt(currentStart) > 20) ? (parseInt(currentStart) - 20) : 0;
     $("#tx-dlf-search-in-document-form input[id='tx-dlf-search-in-document-start']").val(newStart);
     $('#tx-dlf-search-in-document-form').submit();
-};
+}
 
 /**
  * This function resets the start parameter on new queries.
@@ -144,6 +144,85 @@ function getNavigationButtons(start, numFound) {
     return buttons;
 }
 
+/**
+ * Get current page.
+ *
+ * @returns {int}
+ */
+function getCurrentPage() {
+    var page = 1;
+    var baseUrl = getBaseUrl(" ");
+    var queryParams = getCurrentQueryParams(baseUrl);
+    var pageFound = false;
+
+    for(var i = 0; i < queryParams.length; i++) {
+        var queryParam = queryParams[i].split('=');
+
+        if(decodeURIComponent(queryParam[0]) === $("input[id='tx-dlf-search-in-document-page']").attr('name')) {
+            page = parseInt(queryParam[1], 10);
+            pageFound = true;
+        }
+    }
+
+    if (!pageFound) {
+        var url = baseUrl.split('/');
+        page = parseInt(url.pop(), 10);
+    }
+    return page;
+}
+
+/**
+ * Add highlight to image.
+ *
+ * @param {array} data
+ *
+ * @returns void
+ */
+function addImageHighlight(data) {
+    var page = getCurrentPage();
+
+    if (typeof tx_dlf_viewer !== 'undefined' && tx_dlf_viewer.map != null) { // eslint-disable-line camelcase
+        var highlights = [];
+
+        data['documents'].forEach(function (element, i) {
+            if(page <= element['page'] && element['page'] < page + tx_dlf_viewer.countPages()) { // eslint-disable-line camelcase
+                if (element['highlight'].length > 0) {
+                    highlights.push(getHighlights(element['highlight']));
+                }
+                addHighlightEffect(element['highlight']);
+            }
+        });
+
+        tx_dlf_viewer.displayHighlightWord(encodeURIComponent(highlights.join(';'))); // eslint-disable-line camelcase
+    } else {
+        setTimeout(addImageHighlight, 500, data);
+    }
+}
+
+/**
+ * Trigger search for document loaded from hit list.
+ *
+ * @returns void
+ */
+function triggerSearchAfterHitLoad() {
+    var queryParams = getCurrentQueryParams(getBaseUrl(" "));
+    var searchedQueryParam = $("input[id='tx-dlf-search-in-document-highlight-word']").attr('name');
+
+    for(var i = 0; i < queryParams.length; i++) {
+        var queryParam = queryParams[i].split('=');
+
+        if(searchedQueryParam && decodeURIComponent(queryParam[0]).indexOf(searchedQueryParam) !== -1) {
+            $("input[id='tx-dlf-search-in-document-query']").val(decodeURIComponent(queryParam[1]));
+            search();
+            break;
+        } else if(decodeURIComponent(queryParam[0]).indexOf('query') != -1) {
+            $("input[id='tx-dlf-search-in-document-query']").val(decodeURIComponent(queryParam[1]));
+            search();
+            break;
+        }
+    }
+}
+
 function search() {
     resetStart();
 
@@ -216,89 +295,10 @@ function search() {
     });
 }
 
-/**
- * Get current page.
- *
- * @returns {int}
- */
- function getCurrentPage() {
-    var page = 1;
-    var baseUrl = getBaseUrl(" ");
-    var queryParams = getCurrentQueryParams(baseUrl);
-    var pageFound = false;
-
-    for(var i = 0; i < queryParams.length; i++) {
-        var queryParam = queryParams[i].split('=');
-
-        if(decodeURIComponent(queryParam[0]) === $("input[id='tx-dlf-search-in-document-page']").attr('name')) {
-            page = parseInt(queryParam[1], 10);
-            pageFound = true;
-        }
-    }
-
-    if (!pageFound) {
-        var url = baseUrl.split('/');
-        page = parseInt(url.pop(), 10);
-    }
-    return page;
-}
-
-/**
- * Add highlight to image.
- *
- * @param {array} data
- *
- * @returns void
- */
-function addImageHighlight(data) {
-    var page = getCurrentPage();
-
-    if (typeof tx_dlf_viewer !== 'undefined' && tx_dlf_viewer.map != null) { // eslint-disable-line camelcase
-        var highlights = [];
-
-        data['documents'].forEach(function (element, i) {
-            if(page <= element['page'] && element['page'] < page + tx_dlf_viewer.countPages()) { // eslint-disable-line camelcase
-                if (element['highlight'].length > 0) {
-                    highlights.push(getHighlights(element['highlight']));
-                }
-                addHighlightEffect(element['highlight']);
-            }
-        });
-
-        tx_dlf_viewer.displayHighlightWord(encodeURIComponent(highlights.join(';'))); // eslint-disable-line camelcase
-    } else {
-        setTimeout(addImageHighlight, 500, data);
-    }
-}
-
 function clearSearch() {
     $('#tx-dlf-search-in-document-results ul').remove();
     $('.results-active-indicator').remove();
     $('#tx-dlf-search-in-document-query').val('');
-}
-
-/**
- * Trigger search for document loaded from hit list.
- *
- * @returns void
- */
-function triggerSearchAfterHitLoad() {
-    var queryParams = getCurrentQueryParams(getBaseUrl(" "));
-    var searchedQueryParam = $("input[id='tx-dlf-search-in-document-highlight-word']").attr('name');
-
-    for(var i = 0; i < queryParams.length; i++) {
-        var queryParam = queryParams[i].split('=');
-
-        if(searchedQueryParam && decodeURIComponent(queryParam[0]).indexOf(searchedQueryParam) !== -1) {
-            $("input[id='tx-dlf-search-in-document-query']").val(decodeURIComponent(queryParam[1]));
-            search();
-            break;
-        } else if(decodeURIComponent(queryParam[0]).indexOf('query') != -1) {
-            $("input[id='tx-dlf-search-in-document-query']").val(decodeURIComponent(queryParam[1]));
-            search();
-            break;
-        }
-    }
 }
 
 $(document).ready(function() {
