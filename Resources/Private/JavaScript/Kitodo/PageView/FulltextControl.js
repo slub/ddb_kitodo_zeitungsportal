@@ -67,7 +67,7 @@ if (typeof ddbKitodoZeitungsportalFullTextControl === 'undefined') {
         calculatePositions() {
             this.positions.length = 0;
 
-            let texts = $('#tx-dlf-fulltextselection').children('span.textline');
+            let texts = $(this.fullTextScrollElement).children('span.textline');
             // check if fulltext exists for this page
             if (texts.length > 0) {
                 let offset = $('#' + texts[0].id).position().top;
@@ -113,7 +113,7 @@ if (typeof ddbKitodoZeitungsportalFullTextControl === 'undefined') {
             super.activate();
 
             if (this.element === undefined) {
-                this.element = $("#tx-dlf-fulltextselection");
+                this.element = $(this.fullTextScrollElement);
             }
         }
 

@@ -95,7 +95,7 @@ plugin {
     settings {
       tools = fulltexttool
       activateFullTextInitially = 1
-      fullTextScrollElement = div#tx-dlf-fulltextselection
+      fullTextScrollElement = #tx-dlf-fulltextselection
       searchHlParameters = hl,tx_dlf[highlight_word]
     }
   }
