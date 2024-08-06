@@ -96,7 +96,7 @@ plugin {
       tools = fulltexttool
       activateFullTextInitially = 1
       fullTextScrollElement = #tx-dlf-fulltextselection
-      searchHlParameters = hl,tx_dlf[highlight_word]
+      searchHlParameters = tx_dlf[highlight_word]
     }
   }
 
@@ -106,11 +106,11 @@ plugin {
       tools = searchindocumenttool
       searchUrl = https://dev-ddb.fiz-karlsruhe.de/ddb-current/newspaper/item
       documentIdUrlSchema = https://api-q1.deutsche-digitale-bibliothek.de/items/*id*/source/record
-      idInputName = tx_dlf[id]
+      idInputName = issue_id
       pidInputName = tx_dlf[pid]
       queryInputName = tx_dlf[query]
       startInputName = tx_dlf[start]
-      pageInputName = tx_dlf[page]
+      pageInputName = issuepage
       highlightWordInputName = tx_dlf[highlight_word]
       encryptedInputName = tx_dlf[encrypted]
       solrcore = {$constant.solrCore}
