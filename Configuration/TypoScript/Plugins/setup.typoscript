@@ -19,11 +19,11 @@ plugin.tx_ddb_kitodo_zeitungsportal {
 
 plugin.tx_dlf {
   persistence {
-    storagePid = {$constants.configPid}
+    storagePid = {$constant.configPid}
   }
 
   settings {
-    storagePid = {$constants.configPid}
+    storagePid = {$constant.configPid}
   }
 
   view {
