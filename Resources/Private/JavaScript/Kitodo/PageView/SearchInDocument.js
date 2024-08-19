@@ -276,6 +276,7 @@ function search() {
                 resultItems.forEach(function (item, index) {
                     resultList += '<li>' + item + '</li>';
                 });
+
                 addImageHighlight(data);
             } else {
                 resultList += '<li class="noresult"></li>';
