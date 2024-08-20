@@ -14,3 +14,6 @@ The result is located at `Resources/Public/JavaScript/DdbKitodoZeitungsportal.js
 ## Configure the Kitodo.Presentation Extension
 
 Example of dlf part of configuration from LocalConfiguration.php file is available [here](Documentation/LocalConfiguration.md). It can be used as a template for plugin configuration after the installation.
+
+## Maintainer
+typo3@slub-dresden.de
