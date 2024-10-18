@@ -65,12 +65,15 @@ ddbKitodoZeitungsportalFullTextControl = class extends dlfViewerFullTextControl 
     calculatePositions() {
         this.positions.length = 0;
 
-        let texts = $('#tx-dlf-fulltextselection').children('span.textline');
-        let offset = $('#' + texts[0].id).position().top;
+        let texts = $(this.fullTextScrollElement).children('span.textline');
+        // check if fulltext exists for this page
+        if (texts.length > 0) {
+            let offset = $('#' + texts[0].id).position().top;
 
-        for (let text of texts) {
-            let pos = $('#' + text.id).position().top;
-            this.positions[text.id] = pos - offset;
+            for (let text of texts) {
+                let pos = $('#' + text.id).position().top;
+                this.positions[text.id] = pos - offset;
+            }
         }
     }
 
