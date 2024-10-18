@@ -19,7 +19,7 @@ function nextResultPage() {
     var newStart = parseInt(currentStart) + 20;
     $("#tx-dlf-search-in-document-form input[id='tx-dlf-search-in-document-start']").val(newStart);
     $('#tx-dlf-search-in-document-form').submit();
-}
+};
 
 /**
  * This function decreases the start parameter of the search form and submits
@@ -32,7 +32,7 @@ function previousResultPage() {
     var newStart = (parseInt(currentStart) > 20) ? (parseInt(currentStart) - 20) : 0;
     $("#tx-dlf-search-in-document-form input[id='tx-dlf-search-in-document-start']").val(newStart);
     $('#tx-dlf-search-in-document-form').submit();
-}
+};
 
 /**
  * This function resets the start parameter on new queries.
@@ -99,6 +99,79 @@ function getCurrentQueryParams(baseUrl) {
     return [];
 }
 
+/**
+ * Get all URL query parameters for snippet links.
+ * All means that it includes together params which were already supplied in the page url and params which are returned as search results.
+ *
+ * @param {string} baseUrl
+ * @param {array} queryParams
+ *
+ * @returns {array} array with params in form 'param' => 'value'
+ */
+function getAllQueryParams(baseUrl, queryParams) {
+    var params = getCurrentQueryParams(baseUrl);
+
+    var queryParam;
+    for(var i = 0; i < params.length; i++) {
+        queryParam = params[i].split('=');
+        if(queryParams.indexOf(decodeURIComponent(queryParam[0])) === -1) {
+            queryParams.push(decodeURIComponent(queryParam[0]));
+            queryParams[decodeURIComponent(queryParam[0])] = queryParam[1];
+        }
+    }
+    return queryParams;
+}
+
+/**
+ * Check if the URL is configured as SLUG
+ * (id is included in main URL, not in parameter).
+ * // TODO: make it more flexible
+ *
+ * // NOTE: Don't use this in Zeitungsportal - uid is in URL ("slug"), page is in query ("no slug")
+ *
+ * @param {array} element
+ *
+ * @returns {string}
+ */
+ function isUrlConfiguredAsSlug(element) {
+    var baseUrl = getBaseUrl(element['uid']).split('?')[0];
+    return baseUrl.indexOf(element['uid']) > -1;
+}
+
+/**
+ * Get needed URL query parameters.
+ * It returns array of params as objects 'param' => 'value'. It contains exactly 3 params which are taken out of search result.
+ *
+ * @param {array} element
+ *
+ * @returns {array} array with params in form 'param' => 'value'
+ */
+function getNeededQueryParams(element) {
+    var id = $("input[id='tx-dlf-search-in-document-id']").attr('name');
+    var highlightWord = $("input[id='tx-dlf-search-in-document-highlight-word']").attr('name');
+    var page = $("input[id='tx-dlf-search-in-document-page']").attr('name');
+
+    var queryParams = [];
+
+    // NOTE: Omit in Zeitungsportal
+    // if(id && !isUrlConfiguredAsSlug(element)) {
+    //     queryParams.push(id);
+    //     queryParams[id] = element['uid'];
+    // }
+
+    if(highlightWord) {
+        queryParams.push(highlightWord);
+        queryParams[highlightWord] = encodeURIComponent($("input[id='tx-dlf-search-in-document-query']").val());
+    }
+
+    // NOTE: Always do this in Zeitungsportal
+    if(page /* && !isUrlConfiguredAsSlug(element) */) {
+        queryParams.push(page);
+        queryParams[page] = element['page'];
+    }
+
+    return queryParams;
+}
 
 /**
  * Get highlight coordinates as string separated by ';'.
@@ -124,6 +197,42 @@ function getHighlights(highlight) {
 }
 
 /**
+ * Get snippet link.
+ *
+ * @param {array} element
+ *
+ * @returns {string}
+ */
+function getLink(element) {
+    var baseUrl = getBaseUrl(element['uid']);
+
+    var queryParams = getNeededQueryParams(element);
+
+    if (baseUrl.indexOf('?') > 0) {
+        queryParams = getAllQueryParams(baseUrl, queryParams);
+        baseUrl = baseUrl.split('?')[0];
+    }
+
+    // NOTE: This should be omitted for Zeitungsportal
+    // replace last element of URL with page
+    // if (isUrlConfiguredAsSlug(element)) {
+    //     var url = baseUrl.split('/');
+    //     url.pop();
+    //     url.push(element['page']);
+    //     baseUrl = url.join('/');
+    // }
+
+    var link = baseUrl + '?';
+
+    // add query params to result link
+    for(var i = 0; i < queryParams.length; i++) {
+        link += queryParams[i] + '=' + queryParams[queryParams[i]] + '&';
+    }
+    link = link.slice(0, -1);
+    return link;
+}
+
+/**
  * Get navigation buttons.
  *
  * @param {int} start
@@ -135,13 +244,81 @@ function getNavigationButtons(start, numFound) {
     var buttons = "";
 
     if (start > 0) {
-        buttons += '<input type="button" id="tx-dlf-search-in-document-button-previous" class="button-previous" onclick="previousResultPage();" />';
+        buttons += '<input type="button" id="tx-dlf-search-in-document-button-previous" class="button-previous" onclick="previousResultPage();" value="' + $('#tx-dlf-search-in-document-label-previous').text() + '" />';
     }
 
     if (numFound > (start + 20)) {
-        buttons += '<input type="button" id="tx-dlf-search-in-document-button-next" class="button-next" onclick="nextResultPage();" />';
+        buttons += '<input type="button" id="tx-dlf-search-in-document-button-next" class="button-next" onclick="nextResultPage();" value="' + $('#tx-dlf-search-in-document-label-next').text() + '" />';
     }
     return buttons;
+}
+
+function search() {
+    resetStart();
+
+    $('#tx-dlf-search-in-document-loading').show();
+    $('#tx-dlf-search-in-document-clearing').hide();
+    $('#tx-dlf-search-in-document-button-next').hide();
+    $('#tx-dlf-search-in-document-button-previous').hide();
+
+    var postToUrl = '/';
+    if (typeof viewerUrl !== 'undefined') {
+        postToUrl = viewerUrl;
+    } else if ($('#localJsVariables').attr('viewer-url')) {
+        // viewerUrl is not available in DDB viewer page.
+        // but we can use this div-attribute: <div id="localJsVariables" class="off" viewer-url="https://dev-ddb.fiz-karlsruhe.de/viewerdev"  [..]/>
+        postToUrl = $('#localJsVariables').attr('viewer-url');
+    }
+    // Send the data using post
+    $.post(
+        // viewerUrl is set by TypoScript and points to the viewer baseUrl
+        postToUrl,
+        {
+            eID: "tx_dlf_search_in_document",
+            q: $( "input[id='tx-dlf-search-in-document-query']" ).val(),
+            uid: $( "input[id='tx-dlf-search-in-document-id']" ).val(),
+            start: $( "input[id='tx-dlf-search-in-document-start']" ).val(),
+            encrypted: $( "input[id='tx-dlf-search-in-document-encrypted']" ).val(),
+        },
+        function(data) {
+            var resultItems = [];
+            var resultList = '<div class="results-active-indicator"></div><ul>';
+            var start = $( "input[id='tx-dlf-search-in-document-start']" ).val();
+            if (data['numFound'] > 0) {
+                data['documents'].forEach(function (element, i) {
+                    if (start < 0) {
+                        start = i;
+                    }
+                    if (element['snippet'].length > 0) {
+                        resultItems[element['page']] = '<span class="structure">'
+                            + $('#tx-dlf-search-in-document-label-page').text() + ' ' + element['page']
+                            + '</span><br />'
+                            + '<span class="textsnippet">'
+                            + '<a href=\"' + getLink(element) + '\">' + element['snippet'] + '</a>'
+                            + '</span>';
+                    }
+                });
+                // Sort result by page.
+                resultItems.sort(function (a, b) {
+                    return a - b;
+                });
+                resultItems.forEach(function (item, index) {
+                    resultList += '<li>' + item + '</li>';
+                });
+                addImageHighlight(data);
+            } else {
+                resultList += '<li class="noresult">' + $('#tx-dlf-search-in-document-label-noresult').text() + '</li>';
+            }
+            resultList += '</ul>';
+            resultList += getNavigationButtons(start, data['numFound']);
+            $('#tx-dlf-search-in-document-results').html(resultList);
+        },
+        "json"
+    )
+    .done(function (data) {
+        $('#tx-dfgviewer-sru-results-loading').hide();
+        $('#tx-dfgviewer-sru-results-clearing').show();
+    });
 }
 
 /**
@@ -149,7 +326,7 @@ function getNavigationButtons(start, numFound) {
  *
  * @returns {int}
  */
-function getCurrentPage() {
+ function getCurrentPage() {
     var page = 1;
     var baseUrl = getBaseUrl(" ");
     var queryParams = getCurrentQueryParams(baseUrl);
@@ -199,6 +376,12 @@ function addImageHighlight(data) {
     }
 }
 
+function clearSearch() {
+    $('#tx-dlf-search-in-document-results ul').remove();
+    $('.results-active-indicator').remove();
+    $('#tx-dlf-search-in-document-query').val('');
+}
+
 /**
  * Trigger search for document loaded from hit list.
  *
@@ -221,85 +404,6 @@ function triggerSearchAfterHitLoad() {
             break;
         }
     }
-}
-
-function search() {
-    resetStart();
-
-    $('#tx-dlf-search-in-document-loading').show();
-    $('#tx-dlf-search-in-document-clearing').hide();
-    $('#tx-dlf-search-in-document-button-next').hide();
-    $('#tx-dlf-search-in-document-button-previous').hide();
-
-    var postToUrl = '/';
-    if (typeof viewerUrl !== 'undefined') {
-        postToUrl = viewerUrl;
-    } else if ($('#localJsVariables').attr('viewer-url')) {
-        // viewerUrl is not available in DDB viewer page.
-        // but we can use this div-attribute: <div id="localJsVariables" class="off" viewer-url="https://dev-ddb.fiz-karlsruhe.de/viewerdev"  [..]/>
-        postToUrl = $('#localJsVariables').attr('viewer-url');
-    }
-    // Send the data using post
-    $.post(
-        // viewerUrl is set by TypoScript and points to the viewer baseUrl
-        postToUrl,
-        {
-            middleware: "dlf/search-in-document",
-            q: $( "input[id='tx-dlf-search-in-document-query']" ).val(),
-            uid: $( "input[id='tx-dlf-search-in-document-id']" ).val(),
-            pid: $( "input[id='tx-dlf-search-in-document-pid']" ).val(),
-            start: $( "input[id='tx-dlf-search-in-document-start']" ).val(),
-            encrypted: $( "input[id='tx-dlf-search-in-document-encrypted']" ).val(),
-        },
-        function(data) {
-            var resultItems = [];
-            var resultList = '<div class="results-active-indicator"></div><ul>';
-            var start = $( "input[id='tx-dlf-search-in-document-start']" ).val();
-            if (data['numFound'] > 0) {
-                data['documents'].forEach(function (element, i) {
-                    if (start < 0) {
-                        start = i;
-                    }
-                    if (element['snippet'].length > 0) {
-                        resultItems[element['page']] = '<span class="structure">'
-                            + $('#tx-dlf-search-in-document-label-page').text() + ' ' + element['page']
-                            + '</span><br />'
-                            + '<span class="textsnippet">'
-                            + '<a href=\"' + element['url'] + '\">' + element['snippet'] + '</a>'
-                            + '</span>';
-                    }
-                });
-                // Sort result by page.
-                resultItems.sort(function (a, b) {
-                    return a - b;
-                });
-                resultItems.forEach(function (item, index) {
-                    resultList += '<li>' + item + '</li>';
-                });
-
-                addImageHighlight(data);
-            } else {
-                resultList += '<li class="noresult"></li>';
-            }
-            resultList += '</ul>';
-            resultList += getNavigationButtons(start, data['numFound']);
-            $('#tx-dlf-search-in-document-results').html(resultList);
-            $('.noresult').text($('#tx-dlf-search-in-document-label-noresult').text());
-            $('.button-previous').attr('value', $('#tx-dlf-search-in-document-label-previous').text());
-            $('.button-next').attr('value', $('#tx-dlf-search-in-document-label-next').text());
-        },
-        "json"
-    )
-    .done(function (data) {
-        $('#tx-dfgviewer-sru-results-loading').hide();
-        $('#tx-dfgviewer-sru-results-clearing').show();
-    });
-}
-
-function clearSearch() {
-    $('#tx-dlf-search-in-document-results ul').remove();
-    $('.results-active-indicator').remove();
-    $('#tx-dlf-search-in-document-query').val('');
 }
 
 $(document).ready(function() {
