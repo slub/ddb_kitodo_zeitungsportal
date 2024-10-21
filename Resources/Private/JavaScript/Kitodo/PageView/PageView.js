@@ -24,7 +24,7 @@ ddbKitodoZeitungsportalViewer = class extends dlfViewer {
      */
     createOverviewMap(layers) {
         // DDB frontend sets a border-box width of 122px, and we have a border of 3px
-        var OV_WIDTH = 122 - 2 * 3;
+        var ovWidth = 122 - 2 * 3;
 
         var extent = ol.extent.createEmpty();
         for (let i = 0; i < this.images.length; i++) {
@@ -36,7 +36,7 @@ ddbKitodoZeitungsportalViewer = class extends dlfViewer {
 
         // The resolution is the number of projection units (-> pixels on source image)
         // per screen pixel.
-        var resolution = width / OV_WIDTH;
+        var resolution = width / ovWidth;
 
         var ovmap = new ol.control.OverviewMap({
             tipLabel: this.dic['overview-map'],
@@ -78,8 +78,8 @@ ddbKitodoZeitungsportalViewer = class extends dlfViewer {
         $(window).on('map-loadend', function () {
             var map = document.querySelector('.ol-overviewmap-map');
             if (map !== null) {
-                var ov_height = Math.ceil(height / width * OV_WIDTH);
-                map.style.cssText += ";width: " + OV_WIDTH + "px !important; height: " + ov_height + "px !important;";
+                var ovHeight = Math.ceil(height / width * ovWidth);
+                map.style.cssText += ";width: " + ovWidth + "px !important; height: " + ovHeight + "px !important;";
                 ovmap.getOverviewMap().updateSize();
             }
         });
