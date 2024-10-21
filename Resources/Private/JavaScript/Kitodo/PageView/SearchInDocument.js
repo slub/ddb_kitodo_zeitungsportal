@@ -274,7 +274,7 @@ function search() {
         // viewerUrl is set by TypoScript and points to the viewer baseUrl
         postToUrl,
         {
-            eID: "tx_dlf_search_in_document",
+            middleware: "dlf/search-in-document",
             q: $( "input[id='tx-dlf-search-in-document-query']" ).val(),
             uid: $( "input[id='tx-dlf-search-in-document-id']" ).val(),
             start: $( "input[id='tx-dlf-search-in-document-start']" ).val(),
