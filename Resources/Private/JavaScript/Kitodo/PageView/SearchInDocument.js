@@ -19,7 +19,7 @@ function nextResultPage() {
     var newStart = parseInt(currentStart) + 20;
     $("#tx-dlf-search-in-document-form input[id='tx-dlf-search-in-document-start']").val(newStart);
     $('#tx-dlf-search-in-document-form').submit();
-};
+}
 
 /**
  * This function decreases the start parameter of the search form and submits
@@ -32,7 +32,7 @@ function previousResultPage() {
     var newStart = (parseInt(currentStart) > 20) ? (parseInt(currentStart) - 20) : 0;
     $("#tx-dlf-search-in-document-form input[id='tx-dlf-search-in-document-start']").val(newStart);
     $('#tx-dlf-search-in-document-form').submit();
-};
+}
 
 /**
  * This function resets the start parameter on new queries.
@@ -99,79 +99,79 @@ function getCurrentQueryParams(baseUrl) {
     return [];
 }
 
-/**
- * Get all URL query parameters for snippet links.
- * All means that it includes together params which were already supplied in the page url and params which are returned as search results.
- *
- * @param {string} baseUrl
- * @param {array} queryParams
- *
- * @returns {array} array with params in form 'param' => 'value'
- */
-function getAllQueryParams(baseUrl, queryParams) {
-    var params = getCurrentQueryParams(baseUrl);
+// /**
+//  * Get all URL query parameters for snippet links.
+//  * All means that it includes together params which were already supplied in the page url and params which are returned as search results.
+//  *
+//  * @param {string} baseUrl
+//  * @param {array} queryParams
+//  *
+//  * @returns {array} array with params in form 'param' => 'value'
+//  */
+// function getAllQueryParams(baseUrl, queryParams) {
+//     var params = getCurrentQueryParams(baseUrl);
 
-    var queryParam;
-    for(var i = 0; i < params.length; i++) {
-        queryParam = params[i].split('=');
-        if(queryParams.indexOf(decodeURIComponent(queryParam[0])) === -1) {
-            queryParams.push(decodeURIComponent(queryParam[0]));
-            queryParams[decodeURIComponent(queryParam[0])] = queryParam[1];
-        }
-    }
-    return queryParams;
-}
+//     var queryParam;
+//     for(var i = 0; i < params.length; i++) {
+//         queryParam = params[i].split('=');
+//         if(queryParams.indexOf(decodeURIComponent(queryParam[0])) === -1) {
+//             queryParams.push(decodeURIComponent(queryParam[0]));
+//             queryParams[decodeURIComponent(queryParam[0])] = queryParam[1];
+//         }
+//     }
+//     return queryParams;
+// }
 
-/**
- * Check if the URL is configured as SLUG
- * (id is included in main URL, not in parameter).
- * // TODO: make it more flexible
- *
- * // NOTE: Don't use this in Zeitungsportal - uid is in URL ("slug"), page is in query ("no slug")
- *
- * @param {array} element
- *
- * @returns {string}
- */
- function isUrlConfiguredAsSlug(element) {
-    var baseUrl = getBaseUrl(element['uid']).split('?')[0];
-    return baseUrl.indexOf(element['uid']) > -1;
-}
+// /**
+//  * Check if the URL is configured as SLUG
+//  * (id is included in main URL, not in parameter).
+//  * // TODO: make it more flexible
+//  *
+//  * // NOTE: Don't use this in Zeitungsportal - uid is in URL ("slug"), page is in query ("no slug")
+//  *
+//  * @param {array} element
+//  *
+//  * @returns {string}
+//  */
+//  function isUrlConfiguredAsSlug(element) {
+//     var baseUrl = getBaseUrl(element['uid']).split('?')[0];
+//     return baseUrl.indexOf(element['uid']) > -1;
+// }
 
-/**
- * Get needed URL query parameters.
- * It returns array of params as objects 'param' => 'value'. It contains exactly 3 params which are taken out of search result.
- *
- * @param {array} element
- *
- * @returns {array} array with params in form 'param' => 'value'
- */
-function getNeededQueryParams(element) {
-    var id = $("input[id='tx-dlf-search-in-document-id']").attr('name');
-    var highlightWord = $("input[id='tx-dlf-search-in-document-highlight-word']").attr('name');
-    var page = $("input[id='tx-dlf-search-in-document-page']").attr('name');
+// /**
+//  * Get needed URL query parameters.
+//  * It returns array of params as objects 'param' => 'value'. It contains exactly 3 params which are taken out of search result.
+//  *
+//  * @param {array} element
+//  *
+//  * @returns {array} array with params in form 'param' => 'value'
+//  */
+// function getNeededQueryParams(element) {
+//     var id = $("input[id='tx-dlf-search-in-document-id']").attr('name');
+//     var highlightWord = $("input[id='tx-dlf-search-in-document-highlight-word']").attr('name');
+//     var page = $("input[id='tx-dlf-search-in-document-page']").attr('name');
 
-    var queryParams = [];
+//     var queryParams = [];
 
-    // NOTE: Omit in Zeitungsportal
-    // if(id && !isUrlConfiguredAsSlug(element)) {
-    //     queryParams.push(id);
-    //     queryParams[id] = element['uid'];
-    // }
+//     // NOTE: Omit in Zeitungsportal
+//     // if(id && !isUrlConfiguredAsSlug(element)) {
+//     //     queryParams.push(id);
+//     //     queryParams[id] = element['uid'];
+//     // }
 
-    if(highlightWord) {
-        queryParams.push(highlightWord);
-        queryParams[highlightWord] = encodeURIComponent($("input[id='tx-dlf-search-in-document-query']").val());
-    }
+//     if(highlightWord) {
+//         queryParams.push(highlightWord);
+//         queryParams[highlightWord] = encodeURIComponent($("input[id='tx-dlf-search-in-document-query']").val());
+//     }
 
-    // NOTE: Always do this in Zeitungsportal
-    if(page /* && !isUrlConfiguredAsSlug(element) */) {
-        queryParams.push(page);
-        queryParams[page] = element['page'];
-    }
+//     // NOTE: Always do this in Zeitungsportal
+//     if(page /* && !isUrlConfiguredAsSlug(element) */) {
+//         queryParams.push(page);
+//         queryParams[page] = element['page'];
+//     }
 
-    return queryParams;
-}
+//     return queryParams;
+// }
 
 /**
  * Get highlight coordinates as string separated by ';'.
@@ -196,41 +196,41 @@ function getHighlights(highlight) {
     return highlights;
 }
 
-/**
- * Get snippet link.
- *
- * @param {array} element
- *
- * @returns {string}
- */
-function getLink(element) {
-    var baseUrl = getBaseUrl(element['uid']);
+// /**
+//  * Get snippet link.
+//  *
+//  * @param {array} element
+//  *
+//  * @returns {string}
+//  */
+// function getLink(element) {
+//     var baseUrl = getBaseUrl(element['uid']);
 
-    var queryParams = getNeededQueryParams(element);
+//     var queryParams = getNeededQueryParams(element);
 
-    if (baseUrl.indexOf('?') > 0) {
-        queryParams = getAllQueryParams(baseUrl, queryParams);
-        baseUrl = baseUrl.split('?')[0];
-    }
+//     if (baseUrl.indexOf('?') > 0) {
+//         queryParams = getAllQueryParams(baseUrl, queryParams);
+//         baseUrl = baseUrl.split('?')[0];
+//     }
 
-    // NOTE: This should be omitted for Zeitungsportal
-    // replace last element of URL with page
-    // if (isUrlConfiguredAsSlug(element)) {
-    //     var url = baseUrl.split('/');
-    //     url.pop();
-    //     url.push(element['page']);
-    //     baseUrl = url.join('/');
-    // }
+//     // NOTE: This should be omitted for Zeitungsportal
+//     // replace last element of URL with page
+//     // if (isUrlConfiguredAsSlug(element)) {
+//     //     var url = baseUrl.split('/');
+//     //     url.pop();
+//     //     url.push(element['page']);
+//     //     baseUrl = url.join('/');
+//     // }
 
-    var link = baseUrl + '?';
+//     var link = baseUrl + '?';
 
-    // add query params to result link
-    for(var i = 0; i < queryParams.length; i++) {
-        link += encodeURIComponent(queryParams[i]) + '=' + queryParams[queryParams[i]] + '&';
-    }
-    link = link.slice(0, -1);
-    return link;
-}
+//     // add query params to result link
+//     for(var i = 0; i < queryParams.length; i++) {
+//         link += encodeURIComponent(queryParams[i]) + '=' + queryParams[queryParams[i]] + '&';
+//     }
+//     link = link.slice(0, -1);
+//     return link;
+// }
 
 /**
  * Get navigation buttons.
@@ -277,6 +277,7 @@ function search() {
             middleware: "dlf/search-in-document",
             q: $( "input[id='tx-dlf-search-in-document-query']" ).val(),
             uid: $( "input[id='tx-dlf-search-in-document-id']" ).val(),
+            pid: $( "input[id='tx-dlf-search-in-document-pid']" ).val(),
             start: $( "input[id='tx-dlf-search-in-document-start']" ).val(),
             encrypted: $( "input[id='tx-dlf-search-in-document-encrypted']" ).val(),
         },
@@ -294,7 +295,7 @@ function search() {
                             + $('#tx-dlf-search-in-document-label-page').text() + ' ' + element['page']
                             + '</span><br />'
                             + '<span class="textsnippet">'
-                            + '<a href=\"' + getLink(element) + '\">' + element['snippet'] + '</a>'
+                            + '<a href=\"' + element['url'] + '\">' + element['snippet'] + '</a>'
                             + '</span>';
                     }
                 });
@@ -309,6 +310,7 @@ function search() {
             } else {
                 resultList += '<li class="noresult"></li>';
             }
+            console.log(data);
             resultList += '</ul>';
             resultList += getNavigationButtons(start, data['numFound']);
             $('#tx-dlf-search-in-document-results').html(resultList);
@@ -329,7 +331,7 @@ function search() {
  *
  * @returns {int}
  */
- function getCurrentPage() {
+function getCurrentPage() {
     var page = 1;
     var baseUrl = getBaseUrl(" ");
     var queryParams = getCurrentQueryParams(baseUrl);
