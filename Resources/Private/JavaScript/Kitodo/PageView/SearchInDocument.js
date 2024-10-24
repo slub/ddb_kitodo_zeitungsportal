@@ -84,94 +84,78 @@ function getBaseUrl(id) {
 }
 
 /**
- * Get current URL query parameters.
- * It returns array of params in form 'param=value' if there are any params supplied in the given url. If there are none it returns empty array
+ * Get all URL query parameters for snippet links.
+ * All means that it includes together params which were already supplied in the page url and params which are returned as search results.
  *
  * @param {string} baseUrl
+ * @param {array} queryParams
  *
- * @returns {array} array with params or empty
+ * @returns {array} array with params in form 'param' => 'value'
  */
-function getCurrentQueryParams(baseUrl) {
-    if(baseUrl.indexOf('?') > 0) {
-        return baseUrl.slice(baseUrl.indexOf('?') + 1).split('&');
-    }
+function getAllQueryParams(baseUrl, queryParams) {
+    var params = getCurrentQueryParams(baseUrl);
 
-    return [];
+    var queryParam;
+    for(var i = 0; i < params.length; i++) {
+        queryParam = params[i].split('=');
+        if(queryParams.indexOf(decodeURIComponent(queryParam[0])) === -1) {
+            queryParams.push(decodeURIComponent(queryParam[0]));
+            queryParams[decodeURIComponent(queryParam[0])] = queryParam[1];
+        }
+    }
+    return queryParams;
 }
 
-// /**
-//  * Get all URL query parameters for snippet links.
-//  * All means that it includes together params which were already supplied in the page url and params which are returned as search results.
-//  *
-//  * @param {string} baseUrl
-//  * @param {array} queryParams
-//  *
-//  * @returns {array} array with params in form 'param' => 'value'
-//  */
-// function getAllQueryParams(baseUrl, queryParams) {
-//     var params = getCurrentQueryParams(baseUrl);
+/**
+ * Check if the URL is configured as SLUG
+ * (id is included in main URL, not in parameter).
+ * // TODO: make it more flexible
+ *
+ * // NOTE: Don't use this in Zeitungsportal - uid is in URL ("slug"), page is in query ("no slug")
+ *
+ * @param {array} element
+ *
+ * @returns {string}
+ */
+ function isUrlConfiguredAsSlug(element) {
+    var baseUrl = getBaseUrl(element['uid']).split('?')[0];
+    return baseUrl.indexOf(element['uid']) > -1;
+}
 
-//     var queryParam;
-//     for(var i = 0; i < params.length; i++) {
-//         queryParam = params[i].split('=');
-//         if(queryParams.indexOf(decodeURIComponent(queryParam[0])) === -1) {
-//             queryParams.push(decodeURIComponent(queryParam[0]));
-//             queryParams[decodeURIComponent(queryParam[0])] = queryParam[1];
-//         }
-//     }
-//     return queryParams;
-// }
+/**
+ * Get needed URL query parameters.
+ * It returns array of params as objects 'param' => 'value'. It contains exactly 3 params which are taken out of search result.
+ *
+ * @param {array} element
+ *
+ * @returns {array} array with params in form 'param' => 'value'
+ */
+function getNeededQueryParams(element) {
+    var id = $("input[id='tx-dlf-search-in-document-id']").attr('name');
+    var highlightWord = $("input[id='tx-dlf-search-in-document-highlight-word']").attr('name');
+    var page = $("input[id='tx-dlf-search-in-document-page']").attr('name');
 
-// /**
-//  * Check if the URL is configured as SLUG
-//  * (id is included in main URL, not in parameter).
-//  * // TODO: make it more flexible
-//  *
-//  * // NOTE: Don't use this in Zeitungsportal - uid is in URL ("slug"), page is in query ("no slug")
-//  *
-//  * @param {array} element
-//  *
-//  * @returns {string}
-//  */
-//  function isUrlConfiguredAsSlug(element) {
-//     var baseUrl = getBaseUrl(element['uid']).split('?')[0];
-//     return baseUrl.indexOf(element['uid']) > -1;
-// }
+    var queryParams = [];
 
-// /**
-//  * Get needed URL query parameters.
-//  * It returns array of params as objects 'param' => 'value'. It contains exactly 3 params which are taken out of search result.
-//  *
-//  * @param {array} element
-//  *
-//  * @returns {array} array with params in form 'param' => 'value'
-//  */
-// function getNeededQueryParams(element) {
-//     var id = $("input[id='tx-dlf-search-in-document-id']").attr('name');
-//     var highlightWord = $("input[id='tx-dlf-search-in-document-highlight-word']").attr('name');
-//     var page = $("input[id='tx-dlf-search-in-document-page']").attr('name');
+    // NOTE: Omit in Zeitungsportal
+    // if(id && !isUrlConfiguredAsSlug(element)) {
+    //     queryParams.push(id);
+    //     queryParams[id] = element['uid'];
+    // }
 
-//     var queryParams = [];
+    if(highlightWord) {
+        queryParams.push(highlightWord);
+        queryParams[highlightWord] = encodeURIComponent($("input[id='tx-dlf-search-in-document-query']").val());
+    }
 
-//     // NOTE: Omit in Zeitungsportal
-//     // if(id && !isUrlConfiguredAsSlug(element)) {
-//     //     queryParams.push(id);
-//     //     queryParams[id] = element['uid'];
-//     // }
+    // NOTE: Always do this in Zeitungsportal
+    if(page /* && !isUrlConfiguredAsSlug(element) */) {
+        queryParams.push(page);
+        queryParams[page] = element['page'];
+    }
 
-//     if(highlightWord) {
-//         queryParams.push(highlightWord);
-//         queryParams[highlightWord] = encodeURIComponent($("input[id='tx-dlf-search-in-document-query']").val());
-//     }
-
-//     // NOTE: Always do this in Zeitungsportal
-//     if(page /* && !isUrlConfiguredAsSlug(element) */) {
-//         queryParams.push(page);
-//         queryParams[page] = element['page'];
-//     }
-
-//     return queryParams;
-// }
+    return queryParams;
+}
 
 /**
  * Get highlight coordinates as string separated by ';'.
@@ -196,41 +180,57 @@ function getHighlights(highlight) {
     return highlights;
 }
 
-// /**
-//  * Get snippet link.
-//  *
-//  * @param {array} element
-//  *
-//  * @returns {string}
-//  */
-// function getLink(element) {
-//     var baseUrl = getBaseUrl(element['uid']);
+/**
+ * Get current URL query parameters.
+ * It returns array of params in form 'param=value' if there are any params supplied in the given url. If there are none it returns empty array
+ *
+ * @param {string} baseUrl
+ *
+ * @returns {array} array with params or empty
+ */
+function getCurrentQueryParams(baseUrl) {
+    if(baseUrl.indexOf('?') > 0) {
+        return baseUrl.slice(baseUrl.indexOf('?') + 1).split('&');
+    }
 
-//     var queryParams = getNeededQueryParams(element);
+    return [];
+}
 
-//     if (baseUrl.indexOf('?') > 0) {
-//         queryParams = getAllQueryParams(baseUrl, queryParams);
-//         baseUrl = baseUrl.split('?')[0];
-//     }
+/**
+ * Get snippet link.
+ *
+ * @param {array} element
+ *
+ * @returns {string}
+ */
+function getLink(element) {
+    var baseUrl = getBaseUrl(element['uid']);
 
-//     // NOTE: This should be omitted for Zeitungsportal
-//     // replace last element of URL with page
-//     // if (isUrlConfiguredAsSlug(element)) {
-//     //     var url = baseUrl.split('/');
-//     //     url.pop();
-//     //     url.push(element['page']);
-//     //     baseUrl = url.join('/');
-//     // }
+    var queryParams = getNeededQueryParams(element);
 
-//     var link = baseUrl + '?';
+    if (baseUrl.indexOf('?') > 0) {
+        queryParams = getAllQueryParams(baseUrl, queryParams);
+        baseUrl = baseUrl.split('?')[0];
+    }
 
-//     // add query params to result link
-//     for(var i = 0; i < queryParams.length; i++) {
-//         link += encodeURIComponent(queryParams[i]) + '=' + queryParams[queryParams[i]] + '&';
-//     }
-//     link = link.slice(0, -1);
-//     return link;
-// }
+    // NOTE: This should be omitted for Zeitungsportal
+    // replace last element of URL with page
+    // if (isUrlConfiguredAsSlug(element)) {
+    //     var url = baseUrl.split('/');
+    //     url.pop();
+    //     url.push(element['page']);
+    //     baseUrl = url.join('/');
+    // }
+
+    var link = baseUrl + '?';
+
+    // add query params to result link
+    for(var i = 0; i < queryParams.length; i++) {
+        link += encodeURIComponent(queryParams[i]) + '=' + queryParams[queryParams[i]] + '&';
+    }
+    link = link.slice(0, -1);
+    return link;
+}
 
 /**
  * Get navigation buttons.
@@ -251,78 +251,6 @@ function getNavigationButtons(start, numFound) {
         buttons += '<input type="button" id="tx-dlf-search-in-document-button-next" class="button-next" onclick="nextResultPage();" />';
     }
     return buttons;
-}
-
-function search() {
-    resetStart();
-
-    $('#tx-dlf-search-in-document-loading').show();
-    $('#tx-dlf-search-in-document-clearing').hide();
-    $('#tx-dlf-search-in-document-button-next').hide();
-    $('#tx-dlf-search-in-document-button-previous').hide();
-
-    var postToUrl = '/';
-    if (typeof viewerUrl !== 'undefined') {
-        postToUrl = viewerUrl;
-    } else if ($('#localJsVariables').attr('viewer-url')) {
-        // viewerUrl is not available in DDB viewer page.
-        // but we can use this div-attribute: <div id="localJsVariables" class="off" viewer-url="https://dev-ddb.fiz-karlsruhe.de/viewerdev"  [..]/>
-        postToUrl = $('#localJsVariables').attr('viewer-url');
-    }
-    // Send the data using post
-    $.post(
-        // viewerUrl is set by TypoScript and points to the viewer baseUrl
-        postToUrl,
-        {
-            middleware: "dlf/search-in-document",
-            q: $( "input[id='tx-dlf-search-in-document-query']" ).val(),
-            uid: $( "input[id='tx-dlf-search-in-document-id']" ).val(),
-            pid: $( "input[id='tx-dlf-search-in-document-pid']" ).val(),
-            start: $( "input[id='tx-dlf-search-in-document-start']" ).val(),
-            encrypted: $( "input[id='tx-dlf-search-in-document-encrypted']" ).val(),
-        },
-        function(data) {
-            var resultItems = [];
-            var resultList = '<div class="results-active-indicator"></div><ul>';
-            var start = $( "input[id='tx-dlf-search-in-document-start']" ).val();
-            if (data['numFound'] > 0) {
-                data['documents'].forEach(function (element, i) {
-                    if (start < 0) {
-                        start = i;
-                    }
-                    if (element['snippet'].length > 0) {
-                        resultItems[element['page']] = '<span class="structure">'
-                            + $('#tx-dlf-search-in-document-label-page').text() + ' ' + element['page']
-                            + '</span><br />'
-                            + '<span class="textsnippet">'
-                            + '<a href=\"' + element['url'] + '\">' + element['snippet'] + '</a>'
-                            + '</span>';
-                    }
-                });
-                // Sort result by page.
-                resultItems.sort(function (a, b) {
-                    return a - b;
-                });
-                resultItems.forEach(function (item, index) {
-                    resultList += '<li>' + item + '</li>';
-                });
-                addImageHighlight(data);
-            } else {
-                resultList += '<li class="noresult"></li>';
-            }
-            resultList += '</ul>';
-            resultList += getNavigationButtons(start, data['numFound']);
-            $('#tx-dlf-search-in-document-results').html(resultList);
-            $('.noresult').text($('#tx-dlf-search-in-document-label-noresult').text());
-            $('.button-previous').attr('value', $('#tx-dlf-search-in-document-label-previous').text());
-            $('.button-next').attr('value', $('#tx-dlf-search-in-document-label-next').text());
-        },
-        "json"
-    )
-    .done(function (data) {
-        $('#tx-dfgviewer-sru-results-loading').hide();
-        $('#tx-dfgviewer-sru-results-clearing').show();
-    });
 }
 
 /**
@@ -380,12 +308,6 @@ function addImageHighlight(data) {
     }
 }
 
-function clearSearch() {
-    $('#tx-dlf-search-in-document-results ul').remove();
-    $('.results-active-indicator').remove();
-    $('#tx-dlf-search-in-document-query').val('');
-}
-
 /**
  * Trigger search for document loaded from hit list.
  *
@@ -408,6 +330,86 @@ function triggerSearchAfterHitLoad() {
             break;
         }
     }
+}
+
+
+function search() {
+    resetStart();
+
+    $('#tx-dlf-search-in-document-loading').show();
+    $('#tx-dlf-search-in-document-clearing').hide();
+    $('#tx-dlf-search-in-document-button-next').hide();
+    $('#tx-dlf-search-in-document-button-previous').hide();
+
+    var postToUrl = '/';
+    if (typeof viewerUrl !== 'undefined') {
+        postToUrl = viewerUrl;
+    } else if ($('#localJsVariables').attr('viewer-url')) {
+        // viewerUrl is not available in DDB viewer page.
+        // but we can use this div-attribute: <div id="localJsVariables" class="off" viewer-url="https://dev-ddb.fiz-karlsruhe.de/viewerdev"  [..]/>
+        postToUrl = $('#localJsVariables').attr('viewer-url');
+    }
+    // Send the data using post
+    $.post(
+        // viewerUrl is set by TypoScript and points to the viewer baseUrl
+        postToUrl,
+        {
+            middleware: "dlf/search-in-document",
+            q: $( "input[id='tx-dlf-search-in-document-query']" ).val(),
+            uid: $( "input[id='tx-dlf-search-in-document-id']" ).val(),
+            pid: $( "input[id='tx-dlf-search-in-document-pid']" ).val(),
+            start: $( "input[id='tx-dlf-search-in-document-start']" ).val(),
+            encrypted: $( "input[id='tx-dlf-search-in-document-encrypted']" ).val(),
+        },
+        function(data) {
+            var resultItems = [];
+            var resultList = '<div class="results-active-indicator"></div><ul>';
+            var start = $( "input[id='tx-dlf-search-in-document-start']" ).val();
+            if (data['numFound'] > 0) {
+                data['documents'].forEach(function (element, i) {
+                    if (start < 0) {
+                        start = i;
+                    }
+                    if (element['snippet'].length > 0) {
+                        resultItems[element['page']] = '<span class="structure">'
+                            + $('#tx-dlf-search-in-document-label-page').text() + ' ' + element['page']
+                            + '</span><br />'
+                            + '<span class="textsnippet">'
+                            + '<a href=\"' + getLink(element) + '\">' + element['snippet'] + '</a>'
+                            + '</span>';
+                    }
+                });
+                // Sort result by page.
+                resultItems.sort(function (a, b) {
+                    return a - b;
+                });
+                resultItems.forEach(function (item, index) {
+                    resultList += '<li>' + item + '</li>';
+                });
+
+                addImageHighlight(data);
+            } else {
+                resultList += '<li class="noresult"></li>';
+            }
+            resultList += '</ul>';
+            resultList += getNavigationButtons(start, data['numFound']);
+            $('#tx-dlf-search-in-document-results').html(resultList);
+            $('.noresult').text($('#tx-dlf-search-in-document-label-noresult').text());
+            $('.button-previous').attr('value', $('#tx-dlf-search-in-document-label-previous').text());
+            $('.button-next').attr('value', $('#tx-dlf-search-in-document-label-next').text());
+        },
+        "json"
+    )
+    .done(function (data) {
+        $('#tx-dfgviewer-sru-results-loading').hide();
+        $('#tx-dfgviewer-sru-results-clearing').show();
+    });
+}
+
+function clearSearch() {
+    $('#tx-dlf-search-in-document-results ul').remove();
+    $('.results-active-indicator').remove();
+    $('#tx-dlf-search-in-document-query').val('');
 }
 
 $(document).ready(function() {
