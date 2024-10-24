@@ -310,7 +310,6 @@ function search() {
             } else {
                 resultList += '<li class="noresult"></li>';
             }
-            console.log(data);
             resultList += '</ul>';
             resultList += getNavigationButtons(start, data['numFound']);
             $('#tx-dlf-search-in-document-results').html(resultList);
