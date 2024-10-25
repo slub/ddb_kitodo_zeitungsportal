@@ -9,9 +9,10 @@
  * LICENSE.txt file that was distributed with this source code.
 -->
 
-Base template: Kitodo.Presentation v5.0.1
+Base template: Kitodo.Presentation v5.0.6
 - Use absolute URLs to page
 - Make tx-dlf-pagegrid-pagination a sibling (not child) of tx-dlf-pagegrid-thumbnail
+- Replace f:widget.paginate with the new pagination core api
 
 </f:comment>
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
@@ -45,6 +46,5 @@ Base template: Kitodo.Presentation v5.0.1
                 </li>
             </f:for>
         </ol>
-        <f:render partial="Lists/Pagination" arguments="{_all}" />
     </div>
 </html>
