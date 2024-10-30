@@ -65,7 +65,7 @@ ddbKitodoZeitungsportalFullTextControl = class extends dlfViewerFullTextControl 
     calculatePositions() {
         this.positions.length = 0;
 
-        let texts = $(this.fullTextScrollElement).children('span.textline');
+        let texts = $('#tx-dlf-fulltextselection').children('span.textline');
         // check if fulltext exists for this page
         if (texts.length > 0) {
             let offset = $('#' + texts[0].id).position().top;
