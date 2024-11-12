@@ -37,7 +37,7 @@ plugin {
   tx_dlf_navigation < tt_content.list.20.dlf_navigation
   tx_dlf_navigation {
     settings {
-      features = pageStepBack,pageForward
+      features = pageBack,pageForward
       pageStep = 5
       targetPid = {$constant.viewerPid}
     }
@@ -96,7 +96,7 @@ plugin {
       tools = fulltexttool
       activateFullTextInitially = 1
       fullTextScrollElement = #tx-dlf-fulltextselection
-      searchHlParameters = tx_dlf[highlight_word]
+      searchHlParameters = hl,tx_dlf[highlight_word]
     }
   }
 
