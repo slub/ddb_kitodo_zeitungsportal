@@ -9,7 +9,7 @@
  * LICENSE.txt file that was distributed with this source code.
 -->
 
-Base template: Kitodo.Presentation v4.0.0 with data-dic fix
+Base template: Kitodo.Presentation v5.0.6 with data-dic fix
 - Reorder tools to put pdfdownloadtool before fulltextdownloadtool
 - Show PDF download buttons only when available, one li tag per button
 - Add div wrappers to accomodate CSS rules of Zeitungsportal frontend
@@ -45,7 +45,7 @@ Base template: Kitodo.Presentation v4.0.0 with data-dic fix
                         <input type="button" id="tx-dlf-search-in-document-button" value="{f:translate(key: 'search.submit')}" onclick="search();" />
                         <input type="hidden" id="tx-dlf-search-in-document-start" name="{searchInDocument.labelStart}" value="0" />
                         <input type="hidden" id="tx-dlf-search-in-document-id" name="{searchInDocument.labelId}" value="{searchInDocument.documentId}" />
-                        <input type="hidden" id="tx-dlf-search-in-document-pid" name="{searchInDocument.labelPid}" value="{searchInDocument.documentPageId}" />
+                        <input type="hidden" id="tx-dlf-search-in-document-pid" name="{searchInDocument.labelPid}" value="{searchInDocument.pageId}" />
                         <input type="hidden" id="tx-dlf-search-in-document-page" name="{searchInDocument.labelPageUrl}" />
                         <input type="hidden" id="tx-dlf-search-in-document-highlight-word" name="{searchInDocument.labelHighlightWord}" />
                         <input type="hidden" id="tx-dlf-search-in-document-encrypted" name="{searchInDocument.labelEncrypted}" value="{searchInDocument.solrEncrypted}" />
