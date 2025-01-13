@@ -302,9 +302,7 @@ function addImageHighlight(data) {
             }
         });
 
-        if (highlights.length > 0) {
-            tx_dlf_viewer.displayHighlightWord(encodeURIComponent(highlights.join(';'))); // eslint-disable-line camelcase
-        }
+        tx_dlf_viewer.displayHighlightWord(encodeURIComponent(highlights.join(';'))); // eslint-disable-line camelcase
     } else {
         setTimeout(addImageHighlight, 500, data);
     }
