@@ -401,8 +401,8 @@ function search() {
         "json"
     )
     .done(function (data) {
-        $('#tx-dfgviewer-sru-results-loading').hide();
-        $('#tx-dfgviewer-sru-results-clearing').show();
+        $('#tx-dlf-search-in-document-loading').hide();
+        $('#tx-dlf-search-in-document-clearing').show();
     });
 }
 
