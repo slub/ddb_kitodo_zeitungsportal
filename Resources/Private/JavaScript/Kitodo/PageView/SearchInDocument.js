@@ -9,81 +9,6 @@
  */
 
 /**
- * This function increases the start parameter of the search form and submits
- * the form.
- *
- * @returns void
- */
-function nextResultPage() {
-    var currentStart = $("#tx-dlf-search-in-document-form input[id='tx-dlf-search-in-document-start']").val();
-    var newStart = parseInt(currentStart) + 20;
-    $("#tx-dlf-search-in-document-form input[id='tx-dlf-search-in-document-start']").val(newStart);
-    $('#tx-dlf-search-in-document-form').submit();
-}
-
-/**
- * This function decreases the start parameter of the search form and submits
- * the form.
- *
- * @returns void
- */
-function previousResultPage() {
-    var currentStart = $("#tx-dlf-search-in-document-form input[id='tx-dlf-search-in-document-start']").val();
-    var newStart = (parseInt(currentStart) > 20) ? (parseInt(currentStart) - 20) : 0;
-    $("#tx-dlf-search-in-document-form input[id='tx-dlf-search-in-document-start']").val(newStart);
-    $('#tx-dlf-search-in-document-form').submit();
-}
-
-/**
- * This function resets the start parameter on new queries.
- *
- * @returns void
- */
-function resetStart() {
-    $("#tx-dlf-search-in-document-form input[id='tx-dlf-search-in-document-start']").val(0);
-}
-
-/**
- * Add highlight effect for found search phrase.
- * @param {array} highlightIds
- *
- * @returns void
- */
-function addHighlightEffect(highlightIds) {
-    if (highlightIds.length > 0) {
-        highlightIds.forEach(function (highlightId) {
-            var targetElement = $('#' + highlightId);
-
-            if (targetElement.length > 0 && !targetElement.hasClass('highlight')) {
-                targetElement.addClass('highlight');
-            }
-        });
-    }
-}
-
-/**
- * Get base URL for snippet links.
- *
- * @param {string} id
- *
- * @returns {string}
- */
-function getBaseUrl(id) {
-    // Take the workview baseUrl from the form action.
-    // The URL may be in the following form
-    // - http://example.com/index.php?id=14
-    // - http://example.com/workview (using slug on page with uid=14)
-    var baseUrl = $("form#tx-dlf-search-in-document-form").attr('action');
-
-    // check if action URL contains id, if not, get URL from window
-    if(baseUrl === undefined || baseUrl.split('?')[0].indexOf(id) === -1) {
-        baseUrl = $(location).attr('href');
-    }
-
-    return baseUrl;
-}
-
-/**
  * Get all URL query parameters for snippet links.
  * All means that it includes together params which were already supplied in the page url and params which are returned as search results.
  *
@@ -157,44 +82,6 @@ function getNeededQueryParams(element) {
     return queryParams;
 }
 
-/**
- * Get highlight coordinates as string separated by ';'.
- *
- * @param {string} highlight
- *
- * @returns {string}
- */
-function getHighlights(highlight) {
-    var highlights = "";
-
-    for(var i = 0; i < highlight.length; i++) {
-        if (highlights === "") {
-            highlights += highlight[i];
-        } else {
-            if(highlights.indexOf(highlight[i]) === -1) {
-                highlights += ';' + highlight[i];
-            }
-        }
-    }
-
-    return highlights;
-}
-
-/**
- * Get current URL query parameters.
- * It returns array of params in form 'param=value' if there are any params supplied in the given url. If there are none it returns empty array
- *
- * @param {string} baseUrl
- *
- * @returns {array} array with params or empty
- */
-function getCurrentQueryParams(baseUrl) {
-    if(baseUrl.indexOf('?') > 0) {
-        return baseUrl.slice(baseUrl.indexOf('?') + 1).split('&');
-    }
-
-    return [];
-}
 
 /**
  * Get snippet link.
@@ -233,27 +120,6 @@ function getLink(element) {
 }
 
 /**
- * Get navigation buttons.
- *
- * @param {int} start
- * @param {numFound} start
- *
- * @returns {string}
- */
-function getNavigationButtons(start, numFound) {
-    var buttons = "";
-
-    if(start > 0) {
-        buttons += '<input type="button" id="tx-dlf-search-in-document-button-previous" class="button-previous" onclick="previousResultPage();" />';
-    }
-
-    if(numFound > (start + 20)) {
-        buttons += '<input type="button" id="tx-dlf-search-in-document-button-next" class="button-next" onclick="nextResultPage();" />';
-    }
-    return buttons;
-}
-
-/**
  * Get current page.
  *
  * @returns {int}
@@ -278,34 +144,6 @@ function getCurrentPage() {
         page = parseInt(url.pop(), 10);
     }
     return page;
-}
-
-/**
- * Add highlight to image.
- *
- * @param {array} data
- *
- * @returns void
- */
-function addImageHighlight(data) {
-    var page = getCurrentPage();
-
-    if (typeof tx_dlf_viewer !== 'undefined' && tx_dlf_viewer.map != null) { // eslint-disable-line camelcase
-        var highlights = [];
-
-        data['documents'].forEach(function (element, i) {
-            if(page <= element['page'] && element['page'] < page + tx_dlf_viewer.countPages()) { // eslint-disable-line camelcase
-                if (element['highlight'].length > 0) {
-                    highlights.push(getHighlights(element['highlight']));
-                }
-                addHighlightEffect(element['highlight']);
-            }
-        });
-
-        tx_dlf_viewer.displayHighlightWord(encodeURIComponent(highlights.join(';'))); // eslint-disable-line camelcase
-    } else {
-        setTimeout(addImageHighlight, 500, data);
-    }
 }
 
 /**
