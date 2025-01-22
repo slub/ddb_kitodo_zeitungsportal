@@ -120,30 +120,31 @@ function getLink(element) {
 }
 
 /**
- * Get current page.
+ * Get current page number from URL parameters or path.
  *
- * @returns {int}
+ * @returns {number} The current page number or defaults to "1"
  */
 function getCurrentPage() {
-    var page = 1;
-    var baseUrl = getBaseUrl(" ");
-    var queryParams = getCurrentQueryParams(baseUrl);
-    var pageFound = false;
+    const urlParams = new URLSearchParams(window.location.search);
+    // NOTE: if page number is not in urlParams - set page to default "1" if no page number is given
+    const defaultPage = 1;
 
-    for(var i = 0; i < queryParams.length; i++) {
-        var queryParam = queryParams[i].split('=');
+    // Check URL parameters
+    let page = urlParams.get($("input[id='tx-dlf-search-in-document-page']").attr('name')) ||
+               urlParams.get('tx_dlf[page]');
 
-        if(decodeURIComponent(queryParam[0]) === $("input[id='tx-dlf-search-in-document-page']").attr('name')) {
-            page = parseInt(queryParam[1], 10);
-            pageFound = true;
+    // If no parameters found, check URL path
+    if (!page) {
+        const pathSegments = window.location.search.split('/');
+        const lastSegment = pathSegments[pathSegments.length - 1];
+
+        // Check if last segment is a number
+        if (/^\d+$/.test(lastSegment)) {
+            page = lastSegment;
         }
     }
 
-    if (!pageFound) {
-        var url = baseUrl.split('/');
-        page = parseInt(url.pop(), 10);
-    }
-    return page;
+    return page ? parseInt(page, 10) || defaultPage : defaultPage;
 }
 
 /**
