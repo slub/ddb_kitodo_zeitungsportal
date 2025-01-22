@@ -9,6 +9,20 @@
  */
 
 ddbKitodoZeitungsportalViewer = class extends dlfViewer {
+
+    /**
+     * Override: Use coordinates search instead of words.
+     * Forwards the search to dlfUtils.searchFeatureCollectionForCoordinates
+     *
+     * @see dlfUtils.searchFeatureCollectionForCoordinates
+     */
+    searchFeatures(stringFeatures, value) {
+        return dlfUtils.searchFeatureCollectionForCoordinates(stringFeatures, value);
+    }
+
+    /**
+     * Override: Create OpenLayers control for Zeitungsportal.
+     */
     createControl(controlName, layers) {
         if (controlName === 'OverviewMap') {
             return this.createOverviewMap(layers);
