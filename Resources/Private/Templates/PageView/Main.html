@@ -1,0 +1,61 @@
+<f:comment>
+<!--
+ * (c) Kitodo. Key to digital objects e.V. <contact@kitodo.org>
+ *
+ * This file is part of the Kitodo and TYPO3 projects.
+ *
+ * @license GNU General Public License version 3 or later.
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+-->
+
+Base template: Kitodo.Presentation v4.0
+- Remove tx-dlf-annotationselection
+- Remove ov_map
+- Remove basket part
+- Overview Map positioning
+
+</f:comment>
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:kitodo="http://typo3.org/ns/Kitodo/Dlf/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<f:comment>Hide progress bar until stylesheet is loaded</f:comment>
+<style type="text/css">
+    .tx-dlf-page-progress {
+        display: none;
+    }
+</style>
+
+<div id="tx-dlf-map" class="tx-dlf-map" data-dic="overview-map.show:{f:translate(key: 'pageview.overview-map.show', extensionName: 'ddb_kitodo_zeitungsportal')};overview-map.hide:{f:translate(key: 'pageview.overview-map.hide', extensionName: 'ddb_kitodo_zeitungsportal')}" style="height: 1000px;">
+    <progress id="tx-dlf-page-progress" class="tx-dlf-page-progress"></progress>
+</div>
+
+<kitodo:jsFooter inlineCode="{viewerConfiguration}" />
+
+<script>
+    // Hack to allow positioning the overview map in DDB frontend
+    // (Correct height of pageview wrapper when the newspaper title spans multiple lines)
+    function resizePageviewWrapper() {
+        var header = document.querySelector('#viewer-navigation-bar');
+        var footer = document.querySelector('footer.footer-newspaper');
+        var container = document.querySelector('#pageview-wrapper');
+
+        if (header && footer && container) {
+            container.style.height = (footer.getBoundingClientRect().top - header.getBoundingClientRect().bottom) + 'px';
+        }
+    }
+
+    $(window).on('map-loadend', function () {
+        resizePageviewWrapper();
+
+        // DDB 7.3 calls addControl when switching to full screen, which distracts the OverviewMap control
+        tx_dlf_viewer.map.addControl = function () {
+            console.error("addControl is disabled");
+        };
+    });
+
+    window.addEventListener('resize', resizePageviewWrapper);
+</script>
+
+</html>

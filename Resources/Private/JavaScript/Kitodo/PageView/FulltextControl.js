@@ -8,577 +8,123 @@
  * LICENSE.txt file that was distributed with this source code.
  */
 
-/**
- * This is necessary to support the scrolling of the element into the viewport
- * in case of text hover on the map.
- *
- * @param elem
- * @param speed
- * @returns {jQuery}
- */
-jQuery.fn.scrollTo = function(elem, speed) {
-    var manualOffsetTop = $(elem).parent().height() / 2;
-    $(this).animate({
-        scrollTop:  $(this).scrollTop() - $(this).offset().top + $(elem).offset().top - manualOffsetTop
-    }, speed === undefined ? 1000 : speed);
-    return this;
-};
-
-/**
- * Encapsulates especially the fulltext behavior
- * @constructor
- * @param {ol.Map} map
- * @param {Object} image
- * @param {string} fulltextUrl
- */
-var dlfViewerFullTextControl = function(map, image, fulltextUrl) {
-
+// The frontend may load the JS multiple times (TODO...), so avoid redeclaration
+if (typeof ddbKitodoZeitungsportalFullTextControl === 'undefined') {
     /**
-     * @private
-     * @type {ol.Map}
+     * TODO: This can probably be simplified or partly merged into Kitodo
      */
-    this.map = map;
+    class ddbKitodoZeitungsportalFullTextControl extends dlfViewerFullTextControl {
+        constructor(map, image, fulltextUrl) {
+            super(map, image, fulltextUrl);
 
-    /**
-     * @type {Object}
-     * @private
-     */
-    this.image = image;
+            /**
+             * @type {Array}
+             * @private
+             */
+            this.positions_;
 
-    /**
-     * @type {string}
-     * @private
-     */
-    this.url = fulltextUrl;
+            /**
+             * @type {any}
+             * @private
+             */
+            this.element;
 
-    /**
-     * @type {Object}
-     * @private
-     */
-    this.dic = $('#tx-dlf-tools-fulltext').length > 0 && $('#tx-dlf-tools-fulltext').attr('data-dic') ?
-        dlfUtils.parseDataDic($('#tx-dlf-tools-fulltext')) :
-        {
-            'fulltext':'Fulltext',
-            'fulltext-on':'Activate Fulltext',
-            'fulltext-off':'Deactivate Fulltext',
-            'activate-full-text-initially':'0',
-            'full-text-scroll-element':'html, body'};
+            /**
+             * @type {string}
+             * @private
+             */
+            this.lastWidth;
+        }
 
-    /**
-     * @type {number}
-     * @private
-     */
-    this.activateFullTextInitially = this.dic['activate-full-text-initially'] === "1" ? 1 : 0;
+        /**
+         * This getter allows to access and initialize `this.positions_` in a method called from base class constructor
+         * (via `activate()` -> `showFulltext()` -> `calculatePositions()`).
+         *
+         * @private
+         */
+        get positions() {
+            if (this.positions_ === undefined) {
+                this.positions_ = {};
+            }
 
-    /**
-     * @type {string}
-     * @private
-     */
-    this.fullTextScrollElement = this.dic['full-text-scroll-element'];
+            return this.positions_;
+        }
 
-    /**
-     * @type {ol.Feature|undefined}
-     * @private
-     */
-    this.fulltextData_ = undefined;
+        /**
+         * The fulltext container in DZP frontend can be resized horizontally,
+         * so check if we need to recalculate positions.
+         */
+        onResize() {
+            if (this.element != undefined && this.element.css('width') != this.lastWidth) {
+                this.lastWidth = this.element.css('width');
+                this.calculatePositions();
+            }
+        }
 
-    /**
-     * @type {Object}
-     * @private
-     */
-    this.layers_ = {
-        textblock: new ol.layer.Vector({
-            'source': new ol.source.Vector(),
-            'style': dlfViewerOL3Styles.defaultStyle()
-        }),
-        textline: new ol.layer.Vector({
-            'source': new ol.source.Vector(),
-            'style': dlfViewerOL3Styles.invisibleStyle()
-        }),
-        select: new ol.layer.Vector({
-            'source': new ol.source.Vector(),
-            'style': dlfViewerOL3Styles.selectStyle()
-        }),
-        hoverTextblock: new ol.layer.Vector({
-            'source': new ol.source.Vector(),
-            'style': dlfViewerOL3Styles.hoverStyle()
-        }),
-        hoverTextline: new ol.layer.Vector({
-            'source': new ol.source.Vector(),
-            'style': dlfViewerOL3Styles.textlineStyle()
-        })
-    };
+        /**
+         * Calculate position of text lines for scrolling
+         */
+        calculatePositions() {
+            this.positions.length = 0;
 
-    /**
-     * @type {ol.Feature}
-     * @private
-     */
-    this.selectedFeature_ = undefined;
+            let texts = $('#tx-dlf-fulltextselection').children('span.textline');
+            let offset = $('#' + texts[0].id).position().top;
 
-    /**
-     * @type {Array}
-     * @private
-     */
-	this.positions = {};
+            for (let text of texts) {
+                let pos = $('#' + text.id).position().top;
+                this.positions[text.id] = pos - offset;
+            }
+        }
 
-    /**
-     * @type {any}
-     * @private
-     */
-    this.element = undefined;
+        /**
+         * @override
+         */
+        addHighlightEffect(textlineFeature, hoverSourceTextline_) {
+            if (textlineFeature) {
+                var targetElem = $('#' + textlineFeature.getId());
 
-    /**
-     * @type {string}
-     * @private
-     */
-	this.lastHeight;
-
-    /**
-     * @type {Object}
-     * @private
-     */
-    this.handlers_ = {
-        mapClick: $.proxy(function(event) {
-                // the click handler adds the clicked feature to a
-                // select layer which could be used to create a highlight
-                // effect on the map
-
-                var feature = this.map.forEachFeatureAtPixel(event['pixel'], function(feature, layer) {
-                    if (feature.get('type') === 'textblock') {
-                        return feature;
-                    }
-                });
-
-                // deselect all
-                if (feature === undefined) {
-                    this.layers_.select.getSource().clear();
-                    this.selectedFeature_ = undefined;
-                    this.showFulltext(undefined);
-                    return;
+                if (targetElem.length > 0 && !targetElem.hasClass('highlight')) {
+                    targetElem.addClass('highlight');
+                    this.onResize();
+                    setTimeout(this.scrollToText, 1000, targetElem, this.fullTextScrollElement, this.positions);
+                    hoverSourceTextline_.addFeature(textlineFeature);
                 }
-
-                this.handleLayersForClick(feature);
-
-                this.selectedFeature_ = feature;
-
-
-                if (dlfUtils.exists(feature)) {
-                    this.showFulltext([feature]);
-                }
-
-            },
-        this),
-        mapHover: $.proxy(function(event) {
-                // hover in case of dragging
-                if (event['dragging']) {
-                    return;
-                }
-
-                var hoverSourceTextblock_ = this.layers_.hoverTextblock.getSource(),
-                    hoverSourceTextline_ = this.layers_.hoverTextline.getSource(),
-                    selectSource_ = this.layers_.select.getSource(),
-                    map_ = this.map,
-                    textblockFeature,
-                    textlineFeature;
-
-                map_.forEachFeatureAtPixel(event['pixel'], function(feature, layer) {
-                    if (feature.get('type') === 'textblock') {
-                        textblockFeature = feature;
-                    }
-                    if (feature.get('type') === 'textline') {
-                        textlineFeature = feature;
-                    }
-                });
-
-                this.handleTextBlockElements(textblockFeature, selectSource_, hoverSourceTextblock_);
-                this.handleTextLineElements(textlineFeature, hoverSourceTextline_);
-            },
-        this)
-    };
-
-    this.changeActiveBehaviour();
-};
-
-/**
- * Add active / inactive behavior in case of click on control depending if the full text should be activated initially.
- */
-dlfViewerFullTextControl.prototype.changeActiveBehaviour = function() {
-    if (this.activateFullTextInitially === 1) {
-        this.addActiveBehaviourForSwitchOn();
-    } else {
-        this.addActiveBehaviourForSwitchOff();
-    }
-};
-
-dlfViewerFullTextControl.prototype.addActiveBehaviourForSwitchOn = function() {
-    var anchorEl = $('#tx-dlf-tools-fulltext');
-    if (anchorEl.length > 0){
-        var toogleFulltext = $.proxy(function(event) {
-            event.preventDefault();
-
-            this.activateFullTextInitially = 0;
-
-            if ($(event.target).hasClass('active')) {
-                this.deactivate();
-                return;
             }
+        }
 
-            this.activate();
-        }, this);
-
-        anchorEl.on('click', toogleFulltext);
-        anchorEl.on('touchstart', toogleFulltext);
-    }
-
-    // set initial title of fulltext element
-    $("#tx-dlf-tools-fulltext")
-        .text(this.dic['fulltext'])
-        .attr('title', this.dic['fulltext']);
-
-    this.activate();
-};
-
-dlfViewerFullTextControl.prototype.addActiveBehaviourForSwitchOff = function() {
-    var anchorEl = $('#tx-dlf-tools-fulltext');
-    if (anchorEl.length > 0){
-        var toogleFulltext = $.proxy(function(event) {
-            event.preventDefault();
-
-            if ($(event.target).hasClass('active')) {
-                this.deactivate();
-                return;
+        /**
+         * @override
+         */
+        scrollToText(element, fullTextScrollElement, positions) {
+            if (element.hasClass('highlight')) {
+                $(fullTextScrollElement).animate({
+                    scrollTop: positions[element[0].id]
+                }, 500);
             }
-
-            this.activate();
-        }, this);
-
-        anchorEl.on('click', toogleFulltext);
-        anchorEl.on('touchstart', toogleFulltext);
-    }
-
-    // set initial title of fulltext element
-    $("#tx-dlf-tools-fulltext")
-        .text(this.dic['fulltext-on'])
-        .attr('title', this.dic['fulltext-on']);
-
-    // if fulltext is activated via cookie than run activation methode
-    if (dlfUtils.getCookie("tx-dlf-pageview-fulltext-select") === 'enabled') {
-        // activate the fulltext behavior
-        this.activate();
-    }
-};
-
-/**
- * Recalculate position of text lines if full text container was resized
- */
-dlfViewerFullTextControl.prototype.onResize = function() {
-    if (this.element != undefined && this.element.css('width') != this.lastHeight) {
-        this.lastHeight = this.element.css('width');
-        this.calculatePositions();
-    }
-};
-
-/**
- * Calculate position of text lines for scrolling
- */
-dlfViewerFullTextControl.prototype.calculatePositions = function() {
-    this.positions.length = 0;
-
-    let texts = $('#tx-dlf-fulltextselection').children('span.textline');
-    let offset = $('#' + texts[0].id).position().top;
-
-    for(let text of texts) {
-        let pos = $('#' + text.id).position().top;
-        this.positions[text.id] = pos - offset;
-    }
-};
-
-/**
- * Handle layers for click
- * @param {ol.Feature|undefined} feature
- */
-dlfViewerFullTextControl.prototype.handleLayersForClick = function(feature) {
-    // highlight features
-    if (this.selectedFeature_) {
-        // remove old clicks
-        this.layers_.select.getSource().removeFeature(this.selectedFeature_);
-    }
-
-    if (feature) {
-        // remove hover for preventing an adding of styles
-        this.layers_.hoverTextblock.getSource().clear();
-
-        // add feature
-        this.layers_.select.getSource().addFeature(feature);
-    }
-};
-
-/**
- * Handle TextBlock elements
- * @param {ol.Feature|undefined} textblockFeature
- * @param {ol.Feature|undefined} selectSource_
- * @param {any} hoverSourceTextblock_
- */
-dlfViewerFullTextControl.prototype.handleTextBlockElements = function(textblockFeature, selectSource_, hoverSourceTextblock_) {
-    var activeSelectTextBlockEl_ = dlfFullTextUtils.getFeature(selectSource_),
-        activeHoverTextBlockEl_ = dlfFullTextUtils.getFeature(hoverSourceTextblock_),
-        isFeatureEqualSelectFeature_ = dlfFullTextUtils.isFeatureEqual(activeSelectTextBlockEl_, textblockFeature),
-        isFeatureEqualToOldHoverFeature_ = dlfFullTextUtils.isFeatureEqual(activeHoverTextBlockEl_);
-
-    if (!isFeatureEqualToOldHoverFeature_ && !isFeatureEqualSelectFeature_) {
-        // remove old textblock hover features
-        hoverSourceTextblock_.clear();
-
-        if (textblockFeature) {
-            // add textblock feature to hover
-            hoverSourceTextblock_.addFeature(textblockFeature);
-        }
-    }
-};
-
-/**
- * Handle TextLine elements
- * @param {ol.Feature|undefined} textlineFeature
- * @param {any} hoverSourceTextline_
- */
-dlfViewerFullTextControl.prototype.handleTextLineElements = function(textlineFeature, hoverSourceTextline_) {
-    var activeHoverTextBlockEl_ = dlfFullTextUtils.getFeature(hoverSourceTextline_),
-        isFeatureEqualToOldHoverFeature_ = dlfFullTextUtils.isFeatureEqual(activeHoverTextBlockEl_, textlineFeature);
-
-    if (!isFeatureEqualToOldHoverFeature_) {
-        this.removeHighlightEffect(activeHoverTextBlockEl_, hoverSourceTextline_);
-        this.addHighlightEffect(textlineFeature, hoverSourceTextline_);
-    }
-};
-
-/**
- * Remove highlight effect from full text view
- * @param {ol.Feature|undefined} activeHoverTextBlockEl_
- * @param {any} hoverSourceTextline_
- */
-dlfViewerFullTextControl.prototype.removeHighlightEffect = function(activeHoverTextBlockEl_, hoverSourceTextline_) {
-    if (activeHoverTextBlockEl_) {
-        var oldTargetElem = $('#' + activeHoverTextBlockEl_.getId());
-
-        if (oldTargetElem.hasClass('highlight') ) {
-            oldTargetElem.removeClass('highlight');
         }
 
-        // remove old textline hover features
-        hoverSourceTextline_.clear();
-    }
-};
+        /**
+         * @override
+         */
+        activate() {
+            super.activate();
 
-/**
- * Add highlight effect from full text view
- * @param {ol.Feature|undefined} textlineFeature
- * @param {any} hoverSourceTextline_
- */
-dlfViewerFullTextControl.prototype.addHighlightEffect = function(textlineFeature, hoverSourceTextline_) {
-    if (textlineFeature) {
-        var targetElem = $('#' + textlineFeature.getId());
-
-        if (targetElem.length > 0 && !targetElem.hasClass('highlight')) {
-            targetElem.addClass('highlight');
-            this.onResize();
-            setTimeout(this.scrollToText, 1000, targetElem, this.fullTextScrollElement, this.positions);
-            hoverSourceTextline_.addFeature(textlineFeature);
+            if (this.element === undefined) {
+                this.element = $("#tx-dlf-fulltextselection");
+            }
         }
-    }
-};
 
-/**
- * Scroll to full text element if it is highlighted
- * @param {any} element
- * @param {string} fullTextScrollElement
- */
-dlfViewerFullTextControl.prototype.scrollToText = function(element, fullTextScrollElement, positions) {
-    if (element.hasClass('highlight')) {
-        $(fullTextScrollElement).animate({
-            scrollTop: positions[element[0].id]
-        }, 500);
-    }
-};
+        /**
+         * @override
+         */
+        showFulltext(features) {
+            super.showFulltext(features);
 
-/**
- * Activate Fulltext Features
- */
-dlfViewerFullTextControl.prototype.activate = function() {
-
-    var controlEl = $('#tx-dlf-tools-fulltext');
-
-    // if the activate method is called for the first time fetch
-    // fulltext data from server
-    if (this.fulltextData_ === undefined)  {
-        this.fulltextData_ = dlfFullTextUtils.fetchFullTextDataFromServer(this.url, this.image);
-
-        if (this.fulltextData_ !== undefined) {
-            // add features to fulltext layer
-            this.layers_.textblock.getSource().addFeatures(this.fulltextData_.getTextblocks());
-            this.layers_.textline.getSource().addFeatures(this.fulltextData_.getTextlines());
-
-            // add first feature of textBlockFeatures to map
-            if (this.fulltextData_.getTextblocks().length > 0) {
-                this.layers_.select.getSource().addFeature(this.fulltextData_.getTextblocks()[0]);
-                this.selectedFeature_ = this.fulltextData_.getTextblocks()[0];
-                this.showFulltext(this.fulltextData_.getTextblocks());
+            if (features !== undefined) {
+                this.calculatePositions();
             }
         }
     }
 
-    // now activate the fulltext overlay and map behavior
-    this.enableFulltextSelect();
-    dlfUtils.setCookie("tx-dlf-pageview-fulltext-select", 'enabled');
-    $(controlEl).addClass('active');
-
-    // trigger event
-    $(this).trigger("activate-fulltext", this);
-
-    if(this.element === undefined) {
-        this.element = $("#tx-dlf-fulltextselection");
-    }
-};
-
-/**
- * Activate Fulltext Features
- */
-dlfViewerFullTextControl.prototype.deactivate = function() {
-
-    var controlEl = $('#tx-dlf-tools-fulltext');
-
-    // deactivate fulltext
-    this.disableFulltextSelect();
-    dlfUtils.setCookie("tx-dlf-pageview-fulltext-select", 'disabled');
-    $(controlEl).removeClass('active');
-
-    // trigger event
-    $(this).trigger("deactivate-fulltext", this);
-};
-
-/**
- * Disable Fulltext Features
- *
- * @return void
- */
-dlfViewerFullTextControl.prototype.disableFulltextSelect = function() {
-
-    // register event listeners
-    this.map.un('click', this.handlers_.mapClick);
-    this.map.un('pointermove', this.handlers_.mapHover);
-
-    // remove layers
-    for (var key in this.layers_) {
-        if (this.layers_.hasOwnProperty(key)) {
-            this.map.removeLayer(this.layers_[String(key)]);
-        }
-    }
-
-    var className = 'fulltext-visible';
-    $("#tx-dlf-tools-fulltext").removeClass(className)
-
-    if(this.activateFullTextInitially === 0) {
-        $("#tx-dlf-tools-fulltext")
-        .text(this.dic['fulltext-on'])
-        .attr('title', this.dic['fulltext-on']);
-    }
-
-    $('#tx-dlf-fulltextselection').removeClass(className);
-    $('#tx-dlf-fulltextselection').hide();
-    $('body').removeClass(className);
-
-};
-
-/**
- * Activate Fulltext Features
- */
-dlfViewerFullTextControl.prototype.enableFulltextSelect = function() {
-
-    // register event listeners
-    this.map.on('click', this.handlers_.mapClick);
-    this.map.on('pointermove', this.handlers_.mapHover);
-
-    // add layers to map
-    for (var key in this.layers_) {
-        if (this.layers_.hasOwnProperty(key)) {
-            this.map.addLayer(this.layers_[String(key)]);
-        }
-    };
-
-    // show fulltext container
-    var className = 'fulltext-visible';
-    $("#tx-dlf-tools-fulltext").addClass(className);
-
-    if(this.activateFullTextInitially=== 0) {
-        $("#tx-dlf-tools-fulltext")
-        .text(this.dic['fulltext-off'])
-        .attr('title', this.dic['fulltext-off']);
-    }
-
-    $('#tx-dlf-fulltextselection').addClass(className);
-    $('#tx-dlf-fulltextselection').show();
-    $('body').addClass(className);
-};
-
-/**
- * Show full text
- *
- * @param {Array.<ol.Feature>|undefined} features
- */
-dlfViewerFullTextControl.prototype.showFulltext = function(features) {
-
-    if (features !== undefined) {
-        $('#tx-dlf-fulltextselection').children().remove();
-        for (var feature of features) {
-            var textLines = feature.get('textlines');
-            for (var textLine of textLines) {
-                this.appendTextLineSpan(textLine);
-            }
-            $('#tx-dlf-fulltextselection').append('<br /><br />');
-        }
-        this.calculatePositions();
-    }
-};
-
-/**
- * Append text line span
- *
- * @param {Object} textLine
- */
-dlfViewerFullTextControl.prototype.appendTextLineSpan = function(textLine) {
-    var textLineSpan = $('<span class="textline" id="' + textLine.getId() + '">');
-    var content = textLine.get('content');
-
-    for (var item of content) {
-        textLineSpan.append(this.getItemForTextLineSpan(item));
-    }
-
-    textLineSpan.append('<span class="sp"> </span>');
-    $('#tx-dlf-fulltextselection').append(textLineSpan);
-};
-
-/**
- * Get item with id for string elements and without id
- * for spaces or text lines.
- *
- * @param {Object} item
- *
- * @return {string}
- */
-dlfViewerFullTextControl.prototype.getItemForTextLineSpan = function(item) {
-    var span = '';
-    if (item.get('type') === 'string') {
-        span = $('<span class="' + item.get('type') + '" id="' + item.getId() + '"/>');
-    } else {
-        span = $('<span class="' + item.get('type') + '"/>');
-    }
-
-    var spanText = item.get('fulltext');
-    var spanTextLines = spanText.split(/\n/g);
-    for (const [i, spanTextLine] of spanTextLines.entries()) {
-        span.append(document.createTextNode(spanTextLine));
-        if (i < spanTextLines.length - 1) {
-            span.append($('<br />'));
-        }
-    }
-    return span;
-};
+    dlfViewerFullTextControl = ddbKitodoZeitungsportalFullTextControl;
+}
