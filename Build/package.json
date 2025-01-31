@@ -1,6 +1,6 @@
 {
   "name": "ddb-kitodo-zeitungsportal",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "This TYPO3 extension provides the configuration and setup for the DZB-Viewer",
   "main": "gruntfile.js",
   "scripts": {
