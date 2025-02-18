@@ -26,8 +26,8 @@ module.exports = function(grunt) {
                 },
                 files: {
                     "Resources/Public/JavaScript/ddbKitodoZeitungsportal.js" : [
-                        // hack to prevent multiple evaluation of the same script
-                        'Resources/Private/JavaScript/hackEvalOnlyOnce.js',
+                        // prevent multiple evaluation of the same script
+                        'Resources/Private/JavaScript/ScriptLoader.js',
 
                         // jQuery UI and OpenLayers
                         '../dlf/Resources/Public/JavaScript/jQueryUI/jquery-ui-mouse-slider-resizable-autocomplete.js',
@@ -55,7 +55,7 @@ module.exports = function(grunt) {
                         '../dlf/Resources/Public/JavaScript/PageView/FullTextUtility.js',
 
                         // use standard input instead of submit button
-                        '../dlf/Resources/Public/JavaScript/PageView/SearchInDocument.js',   // base on dlf/SearchInDocument
+                        '../dlf/Resources/Public/JavaScript/PageView/SearchInDocument.js',   // based on dlf/SearchInDocument
                         'Resources/Private/JavaScript/Kitodo/PageView/SearchInDocument.js',  // extend and override with DDB SearchInDocument
 
                         // highlight more than one word separated by ' ' and keeping search phrase in search field
