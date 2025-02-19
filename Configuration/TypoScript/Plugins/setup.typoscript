@@ -19,11 +19,11 @@ plugin.tx_ddb_kitodo_zeitungsportal {
 
 plugin.tx_dlf {
   persistence {
-    storagePid = {$constants.configPid}
+    storagePid = {$constant.configPid}
   }
 
   settings {
-    storagePid = {$constants.configPid}
+    storagePid = {$constant.configPid}
   }
 
   view {
@@ -37,7 +37,7 @@ plugin {
   tx_dlf_navigation < tt_content.list.20.dlf_navigation
   tx_dlf_navigation {
     settings {
-      features = pageStepBack,pageForward
+      features = pageBack,pageForward
       pageStep = 5
       targetPid = {$constant.viewerPid}
     }
@@ -75,6 +75,16 @@ plugin {
     settings {
       excludeOther = 0
       targetPid = {$constant.viewerPid}
+      titleReplacements {
+          0 {
+              type = issue
+              fields = type,year
+          }
+          1 {
+              type = volume
+              fields = type,volume
+          }
+      }
     }
   }
 
@@ -85,7 +95,7 @@ plugin {
     settings {
       tools = fulltexttool
       activateFullTextInitially = 1
-      fullTextScrollElement = div#tx-dlf-fulltextselection
+      fullTextScrollElement = #tx-dlf-fulltextselection
       searchHlParameters = hl,tx_dlf[highlight_word]
     }
   }
@@ -97,10 +107,12 @@ plugin {
       searchUrl = https://dev-ddb.fiz-karlsruhe.de/ddb-current/newspaper/item
       documentIdUrlSchema = https://api-q1.deutsche-digitale-bibliothek.de/items/*id*/source/record
       idInputName = issue_id
+      pidInputName = tx_dlf[pid]
       queryInputName = tx_dlf[query]
       startInputName = tx_dlf[start]
       pageInputName = issuepage
       highlightWordInputName = tx_dlf[highlight_word]
+      encryptedInputName = tx_dlf[encrypted]
       solrcore = {$constant.solrCore}
     }
   }

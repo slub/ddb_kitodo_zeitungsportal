@@ -25,9 +25,9 @@ page {
 [traverse(request.getQueryParams(), 'debug') > 0]
 page {
   includeJSLibs {
-    jQuery = EXT:dlf/Resources/Public/Javascript/jQuery/jquery-3.6.0.min.js
+    jQuery = EXT:dlf/Resources/Public/JavaScript/jQuery/jquery-3.6.0.min.js
     jQuery.forceOnTop = 1
-    jqueryUiMouseSlider = EXT:dlf/Resources/Public/Javascript/jQueryUI/jquery-ui-mouse-slider-resizable-autocomplete.js
+    jqueryUiMouseSlider = EXT:dlf/Resources/Public/JavaScript/jQueryUI/jquery-ui-mouse-slider-resizable-autocomplete.js
   }
 }
 [END]
