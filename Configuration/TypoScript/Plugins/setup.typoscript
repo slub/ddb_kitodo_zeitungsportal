@@ -121,6 +121,7 @@ plugin {
   tx_dlf_imagemanipulationtool {
     settings {
       tools = imagemanipulationtool
+      // parentContainer = .tx-dlf-imagemanipulationtool
     }
   }
 }
